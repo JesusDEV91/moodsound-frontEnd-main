@@ -1,0 +1,67 @@
+<div class="mood-selector-container">
+  <div class="mood-selector-card">
+    <!-- Header -->
+    <div class="header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="title"><mat-icon class="title-icon">music_note</mat-icon> ¿Cómo te sientes?</h1>
+    </div>
+
+    <!-- Input de texto libre -->
+    <div class="text-input-section">
+      <p class="instruction">Escribe cómo te sientes en texto libre:</p>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ejemplo: "Estoy muy feliz hoy"</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="userText" 
+          (keyup.enter)="analyzeText()"
+          placeholder="Escribe aquí...">
+        <mat-icon matSuffix>edit</mat-icon>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="analyze-button"
+        (click)="analyzeText()"
+        [disabled]="loading || !userText.trim()">
+        <mat-icon *ngIf="!loading">search</mat-icon>
+        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+        <span *ngIf="!loading">Analizar</span>
+        <span *ngIf="loading">Analizando...</span>
+      </button>
+
+  
+      <div *ngIf="errorMessage" class="error-message">
+        <mat-icon>info</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    </div>
+
+    
+    <div class="divider">
+      <span>  O selecciona directamente  </span>
+    </div>
+
+    <!-- Botones de moods -->
+    <div *ngIf="fetchingMoods" class="moods-skeletons">
+      <div class="mood-skeleton" *ngFor="let i of [1,2,3,4]"></div>
+    </div>
+
+    <div class="moods-grid" *ngIf="!fetchingMoods">
+      <button 
+        *ngFor="let mood of moods"
+        mat-stroked-button
+        class="mood-button"
+        (click)="selectMood(mood.name)"
+        aria-label="Seleccionar {{ mood.displayName }}">
+        <span class="mood-emoji" aria-hidden="true">{{ mood.emoji }}</span>
+        <span class="mood-color" [style.background-color]="mood.color" aria-hidden="true"></span>
+        <span class="mood-name">{{ mood.displayName }}</span>
+      </button>
+    </div>
+  </div>
+</div>

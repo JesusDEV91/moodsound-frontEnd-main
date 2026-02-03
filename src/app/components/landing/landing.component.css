@@ -1,0 +1,124 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, rgba(63,81,181,0.06), rgba(255,107,107,0.03));
+  border-radius: calc(var(--radius) + 4px);
+  padding: 64px 48px;
+  max-width: min(1200px, 96%);
+  width: 100%;
+  box-shadow: var(--shadow-1);
+  text-align: center;
+}
+
+.app-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.app-subtitle {
+  font-size: 18px;
+  color: var(--muted);
+  margin: 0 0 20px 0;
+}
+
+.start-button {
+  font-size: 18px;
+  padding: 12px 34px;
+  margin: 30px 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  box-shadow: 0 8px 22px rgba(63,81,181,0.12);
+}
+
+.start-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(63,81,181,0.15);
+}
+
+.feature mat-icon {
+  font-size: 44px;
+  width: 44px;
+  height: 44px;
+  color: var(--accent);
+}.description {
+  margin: 30px 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.description p {
+  margin: 10px 0;
+}
+
+.start-button {
+  font-size: 20px;
+  padding: 15px 40px;
+  margin: 30px 0;
+  border-radius: 30px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 30px;
+  margin-top: 50px;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #667eea;
+}
+
+.feature h3 {
+  font-size: 18px;
+  margin: 15px 0 5px 0;
+  color: #333;
+}
+
+.feature p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 20px;
+  }
+
+  .app-title {
+    font-size: 36px;
+  }
+
+  .app-subtitle {
+    font-size: 18px;
+  }
+
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}

@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  /* Background gradient to make the app feel lively */
+  --bg: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+  --card-bg: #ffffff;
+  --primary: #3f51b5; /* indigo */
+  --accent: #ff6b6b;  /* coral */
+  --accent-2: #ffb020; /* amber */
+  --muted: #475569; /* slate */
+  --radius: 10px;
+  --shadow-1: 0 8px 30px rgba(20, 30, 60, 0.08);
+
+  /* Additional tokens */
+  --focus: rgba(63,81,181,0.18);
+  --btn-radius: 999px;
+  --shadow-2: 0 12px 36px rgba(31,39,56,0.08);
+  --accent-gradient: linear-gradient(90deg, var(--primary), var(--accent));
+}
+
+html, body { height: 100%; }
+html { font-size: 16px; }
+body { margin: 0; font-family: 'Inter', Roboto, "Helvetica Neue", sans-serif; background: var(--bg); color: #0f172a; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-size: 1rem; }
+
+/* Typography scale */
+h1 { font-size: 2rem; font-weight: 800; line-height: 1.15; margin: 0 0 0.5rem 0; }
+h2 { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+h3 { font-size: 1.125rem; font-weight: 600; }
+
+/* Accessible focus ring and button base */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Button reset / utilities */
+.btn-primary {
+  background: var(--accent-gradient);
+  color: #fff;
+  border-radius: var(--btn-radius);
+  padding: 10px 22px;
+  border: none;
+  box-shadow: var(--shadow-2);
+  transition: transform .14s ease, box-shadow .14s ease, opacity .12s ease;
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 46px rgba(31,39,56,0.12); }
+
+.btn-ghost {
+  background: transparent;
+  border-radius: 8px;
+  color: var(--primary);
+  border: 1px solid rgba(15,23,42,0.06);
+  padding: 8px 16px;
+}
+
+/* Improve native mat button focus for accessibility */
+.mat-mdc-button, .mat-mdc-icon-button {
+  transition: box-shadow .12s ease, transform .12s ease;
+}
+
+.mat-mdc-button:focus-visible, .mat-mdc-icon-button:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--focus); border-radius: 8px; }
+

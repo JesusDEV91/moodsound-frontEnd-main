@@ -1,0 +1,53 @@
+<div class="landing-container">
+  <div class="hero-section">
+    <!-- Logo o título -->
+    <h1 class="app-title"><mat-icon class="brand-icon">music_note</mat-icon> MoodSound</h1><br><br>
+    <p class="app-subtitle">Descubre música según tu estado de ánimo</p>
+
+    <!-- Descripción -->
+    <div class="description">
+      <p>
+        <strong>MoodSound</strong> te ayuda a encontrar <strong><i>la música perfecta</i></strong> para cómo te sientes</p>
+      <p>
+        Simplemente escribe o selecciona un estado de ánimo...
+        ¡y te mostraremos una <strong> playlist personalizada</strong> de YouTube Music!
+      </p>
+    </div>
+
+    
+    <button 
+      mat-raised-button 
+      color="primary" 
+      class="start-button"
+      (click)="goToMoodSelector()">
+      Comenzar 
+    </button>
+
+
+    <div class="features">
+      <div class="feature">
+        <mat-icon>text_fields</mat-icon>
+        <h3>Texto libre</h3>
+        <p>Escribe "Estoy feliz" o "Me siento triste"</p>
+      </div>
+
+      <div class="feature">
+        <mat-icon>touch_app</mat-icon>
+        <h3>Selección rápida</h3>
+        <p>Pulsa los estados para elegir tu mood</p>
+      </div>
+
+      <div class="feature">
+        <mat-icon>music_note</mat-icon>
+        <h3>100M+ canciones</h3>
+        <p>Acceso a todo el catálogo de YouTube Music</p>
+      </div>
+
+      <div class="feature">
+        <mat-icon>flash_on</mat-icon>
+        <h3>Súper rápido</h3>
+        <p>Resultados en menos de 10 segundos</p>
+      </div>
+    </div>
+  </div>
+</div>
