@@ -181,16 +181,24 @@
 }
 
 .refresh-button {
-  height: 38px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  color: white;
+  font-size: 12px;
+  padding: 12px 34px;
+  margin: 30px 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #a855f7) !important; 
+  color: #ffffff !important; 
   border: none;
-  box-shadow: 0 8px 20px rgba(63,81,181,0.12);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase; 
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .refresh-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(63,81,181,0.14);
+ transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.4);
 } 
 
 .track-card {
