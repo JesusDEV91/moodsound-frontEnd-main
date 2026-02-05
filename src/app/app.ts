@@ -1,14 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-// Ajusta la ruta según donde creaste la carpeta finalmente
-import { MiniPlayerComponent } from './components/mini-player/mini-player'; 
+import { CommonModule } from '@angular/common';
+
+// Importa Angular Material para que 'mat-toolbar' funcione
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+
+// Importa tu mini-reproductor (ajusta la ruta si es necesario)
+import { MiniPlayerComponent } from './components/mini-player/mini-player';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
-    MiniPlayerComponent // <--- ESTO ES LO QUE SOLUCIONA EL ERROR
+    RouterOutlet,
+    CommonModule,
+    MatToolbarModule, 
+    MatButtonModule,
+    MatIconModule,
+    MiniPlayerComponent 
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
@@ -16,7 +27,6 @@ import { MiniPlayerComponent } from './components/mini-player/mini-player';
 export class AppComponent implements OnInit {
   
   ngOnInit() {
-    // Esto asegura que el reproductor de YouTube funcione globalmente
     if (!window['YT']) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
