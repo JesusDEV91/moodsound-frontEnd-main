@@ -3,7 +3,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  /* subtle radial accent + base gradient */
+ 
   background: radial-gradient(circle at 10% 10%, rgba(63,81,181,0.06), transparent 20%), var(--bg);
   padding: 40px 32px;
 }
@@ -187,7 +187,7 @@
   color: #0f172a;
 }
 
-/* Responsive */
+
 @media (max-width: 600px) {
   .mood-selector-card {
     padding: 24px 16px;

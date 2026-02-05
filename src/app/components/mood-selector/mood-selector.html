@@ -1,6 +1,6 @@
 <div class="mood-selector-container">
   <div class="mood-selector-card">
-    <!-- Header -->
+
     <div class="header">
       <button mat-icon-button (click)="goBack()" class="back-button">
         <mat-icon>arrow_back</mat-icon>
@@ -8,7 +8,7 @@
       <h1 class="title"><mat-icon class="title-icon">music_note</mat-icon> ¿Cómo te sientes?</h1>
     </div>
 
-    <!-- Input de texto libre -->
+    
     <div class="text-input-section">
       <p class="instruction">Escribe cómo te sientes en texto libre:</p>
       
@@ -46,7 +46,6 @@
       <span>  O selecciona directamente  </span>
     </div>
 
-    <!-- Botones de moods -->
     <div *ngIf="fetchingMoods" class="moods-skeletons">
       <div class="mood-skeleton" *ngFor="let i of [1,2,3,4]"></div>
     </div>
