@@ -1,7 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { YouTubePlayerModule } from '@angular/youtube-player'; // <--- Importante
 
 import { routes } from './app.routes';
 
@@ -10,6 +11,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    importProvidersFrom(YouTubePlayerModule) 
   ]
 };

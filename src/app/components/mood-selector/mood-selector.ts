@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider'; // <-- AÑADIDO
 import { MoodService } from '../../services/mood.service';
 import { Mood } from '../../models/mood.model';
 
@@ -20,13 +21,15 @@ import { Mood } from '../../models/mood.model';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSliderModule // <-- AÑADIDO
   ],
   templateUrl: './mood-selector.html',
   styleUrls: ['./mood-selector.css']
 })
 export class MoodSelectorComponent implements OnInit {
   userText: string = '';
+  intensityValue: number = 3; // <-- NUEVA VARIABLE PARA EL SLIDER
   moods: Mood[] = [];
   loading: boolean = false;
   fetchingMoods: boolean = true;
@@ -65,14 +68,19 @@ export class MoodSelectorComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.moodService.analyzeMood({ text: this.userText }).subscribe({
+    // MODIFICADO: Enviamos también la intensidad
+    const request = { 
+      text: this.userText, 
+      intensity: this.intensityValue 
+    };
+
+    this.moodService.analyzeMood(request).subscribe({
       next: (response) => {
         this.loading = false;
         if (response.detected && response.mood) {
-          // Mood detectado, ir a playlist
-          this.router.navigate(['/playlist', response.mood]);
+          // Si tu backend soporta intensidad, podrías pasarla también por la URL
+          this.router.navigate(['/playlist', response.mood], { queryParams: { intensity: this.intensityValue }});
         } else {
-          // No detectado, mostrar mensaje
           this.errorMessage = response.message || 'No se pudo detectar tu estado de ánimo';
         }
       },
@@ -85,7 +93,8 @@ export class MoodSelectorComponent implements OnInit {
   }
 
   selectMood(moodName: string) {
-    this.router.navigate(['/playlist', moodName]);
+
+    this.router.navigate(['/playlist', moodName], { queryParams: { intensity: this.intensityValue }});
   }
 
   goBack() {

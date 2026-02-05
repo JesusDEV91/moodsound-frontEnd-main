@@ -1,56 +1,67 @@
+/* =========================================
+   1. CONTENEDOR PRINCIPAL Y FONDO
+   ========================================= */
 .mood-selector-container {
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
- 
-  background: radial-gradient(circle at 10% 10%, rgba(63,81,181,0.06), transparent 20%), var(--bg);
+  /* Mantenemos tu gradiente radial sutil */
+  background: radial-gradient(circle at 10% 10%, rgba(63,81,181,0.06), transparent 20%), #f8fafc;
   padding: 40px 32px;
 }
 
 .mood-selector-card {
-  background: var(--card-bg);
-  border-radius: calc(var(--radius) + 2px);
+  background: #ffffff;
+  border-radius: 24px;
   padding: 40px;
   max-width: min(1100px, 96%);
   width: 100%;
-  box-shadow: var(--shadow-1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.02);
   border-top: 4px solid transparent;
-  background-image: linear-gradient(0deg, rgba(0,0,0,0.02), rgba(0,0,0,0)), linear-gradient(90deg, rgba(63,81,181,0.02), rgba(255,107,107,0.02));
+  background-image: linear-gradient(0deg, rgba(0,0,0,0.01), rgba(0,0,0,0)), 
+                    linear-gradient(90deg, rgba(63,81,181,0.01), rgba(255,107,107,0.01));
 }
 
+/* =========================================
+   2. HEADER
+   ========================================= */
 .header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .back-button {
   margin-right: 10px;
+  color: #6366f1;
 }
 
 .title {
-  font-size: 20px;
+  font-size: 22px;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--primary);
-  font-weight: 600;
+  gap: 10px;
+  color: #1e293b;
+  font-weight: 700;
 }
 
 .title-icon {
-  font-size: 22px;
-  color: var(--primary);
+  font-size: 24px;
+  color: #6366f1;
 }
 
+/* =========================================
+   3. SECCIÓN DE ENTRADA Y MOOD-BAR
+   ========================================= */
 .text-input-section {
   margin-bottom: 32px;
 }
 
 .instruction {
   font-size: 14px;
-  color: var(--muted);
+  color: #64748b;
   margin-bottom: 12px;
 }
 
@@ -58,36 +69,78 @@
   width: 100%;
 }
 
-.analyze-button {
-  width: 100%;
-  height: 44px;
-  font-size: 16px;
-  margin-top: 10px;
+/* Estilos específicos de la barra de intensidad */
+.intensity-section {
+  background: rgba(99, 102, 241, 0.03);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 15px 0 25px 0;
+  border: 1px solid rgba(99, 102, 241, 0.08);
+  text-align: center;
 }
 
-.analyze-button mat-spinner {
-  display: inline-block;
-  margin-right: 10px;
+.intensity-instruction {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 12px;
 }
 
-.error-message {
+.slider-container {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 15px;
-  padding: 12px;
-  background-color: #fff3cd;
-  border-radius: 8px;
-  color: #856404;
+  gap: 12px;
+  justify-content: center;
 }
 
-.error-message mat-icon {
-  color: #856404;
+.slider-container mat-icon {
+  color: #cbd5e1;
+  transition: color 0.3s ease;
 }
 
+.active-icon {
+  color: #6366f1 !important;
+}
+
+.intensity-label {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.intensity-label strong {
+  color: #6366f1;
+  font-size: 16px;
+}
+
+/* Botón de Analizar */
+.analyze-button {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px !important;
+  background: linear-gradient(90deg, #6366f1, #a855f7) !important;
+  color: white !important;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+  transition: transform .12s, box-shadow .12s;
+}
+
+.analyze-button:disabled {
+  background: #e2e8f0 !important;
+  color: #94a3b8 !important;
+}
+
+.analyze-button:not(:disabled):active {
+  transform: translateY(2px);
+}
+
+/* =========================================
+   4. DIVISORES Y ESTADOS DE CARGA
+   ========================================= */
 .divider {
   text-align: center;
-  margin: 30px 0;
+  margin: 35px 0;
   position: relative;
 }
 
@@ -96,112 +149,100 @@
   content: '';
   position: absolute;
   top: 50%;
-  width: 40%;
+  width: 35%;
   height: 1px;
-  background: #e6e9ee;
+  background: #e2e8f0;
 }
 
-.divider::before {
-  left: 0;
-}
-
-.divider::after {
-  right: 0;
-}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
 
 .divider span {
-  background: var(--card-bg);
+  background: #ffffff;
   padding: 0 15px;
-  color: var(--muted);
+  color: #94a3b8;
   font-size: 13px;
+  font-weight: 500;
 }
 
+.moods-skeletons { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 12px; 
+}
+
+.mood-skeleton { 
+  height: 64px; 
+  border-radius: 12px; 
+  background: linear-gradient(90deg, #f1f5f9, #f8fafc, #f1f5f9); 
+  background-size: 200% 100%; 
+  animation: shimmer .9s linear infinite; 
+}
+
+/* =========================================
+   5. BOTONES DE MOOD (EMOJIS)
+   ========================================= */
 .moods-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
-.moods-skeletons { display:grid; grid-template-columns: repeat(2,1fr); gap:12px }
-.mood-skeleton { height:64px; border-radius:10px; background: linear-gradient(90deg,#eee,#f7f7f7,#eee); background-size:200% 100%; animation: shimmer .9s linear infinite }
-@keyframes shimmer { 0%{ background-position: -200% 0 } 100%{ background-position:200% 0 } }
-
 .mood-button {
   height: 64px;
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 0 16px;
-  justify-content: flex-start;
-  color: #0f172a;
+  padding: 0 20px !important;
+  justify-content: flex-start !important;
+  color: #1e293b;
   font-weight: 700;
-  border-radius: 10px;
-  border: 1px solid rgba(15, 23, 42, 0.04);
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  border-radius: 14px !important;
+  border: 1px solid rgba(15, 23, 42, 0.05) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mood-button:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(31, 39, 56, 0.08);
-  border-color: rgba(63,81,181,0.12);
+  background-color: #ffffff !important;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.04);
+  border-color: #6366f1 !important;
 }
 
 .mood-emoji {
-  font-size: 22px;
-  width: 36px;
-  height: 36px;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background: linear-gradient(180deg, rgba(63,81,181,0.04), rgba(255,107,107,0.02));
-  box-shadow: 0 6px 18px rgba(31, 39, 56, 0.04);
+  border-radius: 10px;
+  background: #f8fafc;
   flex-shrink: 0;
-  transition: transform .16s cubic-bezier(.2,.9,.3,1);
 }
-
-.mood-button:active .mood-emoji { transform: scale(1.12) rotate(-6deg) }
-
-.mood-button:focus-visible { box-shadow: 0 0 0 4px var(--focus); outline: none; }
-
-.analyze-button { transition: transform .12s, box-shadow .12s }
-.analyze-button:active { transform: translateY(1px) }
 
 .mood-color {
-  width: 18px;
-  height: 18px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  display: inline-block;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
-  flex-shrink: 0;
+  box-shadow: 0 0 0 2px #fff, 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .mood-name {
   font-size: 15px;
-  color: #0f172a;
-  margin-left: 6px;
-}
-
-.mood-name {
-  font-size: 15px;
-  color: #0f172a;
+  color: #1e293b;
 }
 
 
-@media (max-width: 600px) {
-  .mood-selector-card {
-    padding: 24px 16px;
-  }
+@media (max-width: 650px) {
+  .mood-selector-card { padding: 30px 20px; }
+  .moods-grid, .moods-skeletons { grid-template-columns: 1fr; }
+  .title { font-size: 18px; }
+  .intensity-container { padding: 15px; }
+  .custom-slider { max-width: 200px; }
+}
 
-  .title {
-    font-size: 18px;
-  }
-
-  .moods-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .mood-button {
-    height: 56px;
-  }
+@keyframes shimmer { 
+  0% { background-position: -200% 0 } 
+  100% { background-position: 200% 0 } 
 }

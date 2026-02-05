@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PlaylistComponent } from './playlist.ts';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
-import { Playlist } from './playlist';
-
-describe('Playlist', () => {
-  let component: Playlist;
-  let fixture: ComponentFixture<Playlist>;
+describe('PlaylistComponent', () => {
+  let component: PlaylistComponent;
+  let fixture: ComponentFixture<PlaylistComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Playlist]
-    })
-    .compileComponents();
+      imports: [PlaylistComponent, YouTubePlayerModule],
+      providers: [provideHttpClient(), provideRouter([])]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(Playlist);
+    fixture = TestBed.createComponent(PlaylistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

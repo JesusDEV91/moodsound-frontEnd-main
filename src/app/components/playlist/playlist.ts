@@ -5,6 +5,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+
 import { PlaylistService } from '../../services/playlist.service';
 import { PlaylistResponse } from '../../models/playlist.model';
 import { Track } from '../../models/track.model';
@@ -17,7 +19,8 @@ import { Track } from '../../models/track.model';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    YouTubePlayerModule
   ],
   templateUrl: './playlist.html',
   styleUrls: ['./playlist.css']
@@ -27,6 +30,8 @@ export class PlaylistComponent implements OnInit {
   loading: boolean = true;
   errorMessage: string = '';
   moodName: string = '';
+  intensity: number = 3;
+  currentTrack: Track | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,54 +42,43 @@ export class PlaylistComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.moodName = params['mood'];
-      this.loadPlaylist();
+      this.route.queryParams.subscribe(qParams => {
+        this.intensity = qParams['intensity'] || 3;
+        this.loadPlaylist();
+      });
     });
   }
 
   loadPlaylist() {
     this.loading = true;
-    this.errorMessage = '';
-
     this.playlistService.getPlaylist(this.moodName).subscribe({
       next: (playlist) => {
         this.playlist = playlist;
         this.loading = false;
       },
-      error: (error) => {
-        console.error('Error loading playlist:', error);
+      error: () => {
         this.errorMessage = 'Error al cargar la playlist';
         this.loading = false;
       }
     });
   }
 
+  openTrack(track: Track) {
+    this.currentTrack = track;
+  }
+
+  closePlayer() {
+    this.currentTrack = null;
+  }
+
   refreshPlaylist() {
     this.loading = true;
-    this.errorMessage = '';
-
     this.playlistService.refreshPlaylist(this.moodName).subscribe({
-      next: (response) => {
-        console.log('Playlist refreshed:', response);
-        // Recargar la playlist
-        this.loadPlaylist();
-      },
-      error: (error) => {
-        console.error('Error refreshing playlist:', error);
-        this.errorMessage = 'Error al actualizar la playlist';
-        this.loading = false;
-      }
+      next: () => this.loadPlaylist(),
+      error: () => this.loading = false
     });
   }
 
-  openTrack(track: Track) {
-    window.open(track.externalUrl, '_blank');
-  }
-
-  goBack() {
-    this.router.navigate(['/mood-selector']);
-  }
-
-  goHome() {
-    this.router.navigate(['/']);
-  }
+  goBack() { this.router.navigate(['/mood-selector']); }
+  goHome() { this.router.navigate(['/']); }
 }
