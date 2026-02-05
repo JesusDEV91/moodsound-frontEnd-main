@@ -1,228 +1,152 @@
 /* =========================================
-   1. CONTENEDOR Y CABECERA
+   1. CABECERA (Alineación y Tamaños)
    ========================================= */
 .playlist-page {
   min-height: 100vh;
   background: #f8fafc;
   padding: 20px;
-  border-top: 6px solid #6366f1; /* Color dinámico desde el TS */
+  border-top: 6px solid #6366f1;
 }
 
 .playlist-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   background: white;
-  padding: 15px 20px;
-  border-radius: 20px;
+  padding: 12px 18px;
+  border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.mood-info {
+.header-left, .header-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.mood-emoji {
-  font-size: 2rem;
-}
-
 .mood-title {
-  font-size: 1.25rem;
+  font-size: 1.1rem; /* Letras más pequeñas y elegantes */
   font-weight: 800;
   margin: 0;
   color: #1e293b;
-}
-/* 1. Limpiar símbolos extraños y flechas de sistema */
-button, .btn-play-mini {
-  appearance: none;
-  -webkit-appearance: none;
-  border: none;
-  background: transparent;
-  outline: none;
+  line-height: 1.2;
 }
 
-/* Elimina el triángulo negro que a veces pone Chrome en elementos summary/button */
-button::-webkit-details-marker {
-  display: none;
+/* BOTONES SUPERIORES IGUALADOS */
+.btn-refresh {
+  height: 40px !important;
+  border-radius: 10px !important;
+  background-color: #6366f1 !important;
+  color: white !important;
+  font-size: 0.85rem !important;
 }
 
-/* 2. Corregir la miniatura para que no "escupa" nada hacia afuera */
-.track-thumb {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  flex-shrink: 0; /* Evita que la foto se aplaste */
-  border-radius: 12px;
-  overflow: hidden; /* ESTO es clave para que no salgan cosas debajo */
-  display: flex;
+.btn-home {
+  width: 40px !important;
+  height: 40px !important;
+  background-color: #f1f5f9 !important;
+  color: #64748b !important;
+  border-radius: 10px !important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }
 
-.track-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block; /* Quita el espacio de reserva para letras debajo de la imagen */
-}
-
-/* 3. Posicionar bien el botón de la derecha */
-.btn-play-mini {
-  margin-left: auto; /* Empuja el botón al final de la tarjeta */
-  color: #6366f1;
-}
-
-/* 4. Estilo para el overlay de la foto (solo se ve al pasar el ratón) */
-.play-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.track-card:hover .play-overlay {
-  opacity: 1;
-}
-
-.play-overlay mat-icon {
-  color: white;
-}
-/* ETIQUETAS DE AUDIENCIA */
-.audience-tag {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 6px;
-  text-transform: uppercase;
-  margin: 0;
-}
-
-.audience-tag.adult { background: #e0e7ff; color: #4338ca; }
-.audience-tag.kids { background: #dcfce7; color: #059669; }
-
 /* =========================================
-   2. ANIMACIÓN REFRESH (Spinning)
-   ========================================= */
-.spinning {
-  animation: rotate 1s linear infinite;
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* =========================================
-   3. SKELETON LOADING (El efecto de brillo)
-   ========================================= */
-.skeleton-card {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background: white;
-  border-radius: 16px;
-  margin-bottom: 12px;
-  gap: 15px;
-}
-
-.skeleton-thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  background: #f1f5f9;
-}
-
-.skeleton-line {
-  background: #f1f5f9;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
-.skeleton-line.title { width: 180px; height: 14px; }
-.skeleton-line.artist { width: 100px; height: 10px; }
-
-.skeleton-thumb, .skeleton-line, .skeleton-btn {
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* =========================================
-   4. TARJETAS DE CANCIONES REALES
+   2. TARJETAS DE CANCIONES (Play al final)
    ========================================= */
 .track-card {
   display: flex;
   align-items: center;
-  padding: 15px;
+  padding: 10px 15px; /* Más compacto */
   background: white;
-  border-radius: 16px;
-  margin-bottom: 12px;
+  border-radius: 14px;
+  margin-bottom: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-  animation: slideIn 0.4s ease forwards;
+  transition: all 0.2s ease;
+  animation: slideIn 0.3s ease forwards;
   opacity: 0;
 }
 
 .track-card:hover {
-  transform: translateX(8px);
-  border-color: #6366f1;
-  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.05);
+  background: #fdfdfd;
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 
 .track-thumb {
+  width: 50px; /* Foto un poco más pequeña */
+  height: 50px;
   position: relative;
-  width: 60px;
-  height: 60px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .track-thumb img {
   width: 100%;
   height: 100%;
-  border-radius: 12px;
   object-fit: cover;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  display: block;
 }
 
 .track-details {
-  flex: 1;
+  flex: 1; /* Ocupa el espacio central */
   margin-left: 15px;
+  overflow: hidden; /* Evita que el texto rompa el layout */
 }
 
 .track-title {
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.88rem; /* Título más pequeño */
+  font-weight: 600;
   margin: 0;
   color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Corta el texto si es muy largo con ... */
 }
 
 .track-artist {
-  font-size: 0.8rem;
+  font-size: 0.75rem; /* Artista más pequeño */
   color: #64748b;
-  margin: 0;
+  margin: 2px 0 0 0;
 }
+
+/* BOTÓN PLAY AL FINAL A LA DERECHA */
+.btn-play-mini {
+  margin-left: auto; /* Empuja el botón al final de la fila flex */
+  color: #6366f1;
+}
+
+.btn-play-mini mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+/* Limpieza de botones */
+button { appearance: none; -webkit-appearance: none; border: none; outline: none; }
+button::-webkit-details-marker { display: none; }
+
+/* =========================================
+   3. ANIMACIONES
+   ========================================= */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.spinning { animation: rotate 1s linear infinite; }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* Etiqueta audiencia pequeña */
+.audience-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.audience-tag.adult { background: #e0e7ff; color: #4338ca; }
+.audience-tag.kids { background: #dcfce7; color: #059669; }
