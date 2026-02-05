@@ -6,15 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { switchMap } from 'rxjs';
 
 // Servicios
 import { PlaylistService } from '../../services/playlist.service';
-import { PlayerService } from '../../services/player.service'; // <--- NUEVO
+import { PlayerService } from '../../services/player.service';
 
 // Modelos
 import { PlaylistResponse } from '../../models/playlist.model';
 import { Track } from '../../models/track.model';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-playlist',
@@ -31,20 +31,20 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./playlist.css']
 })
 export class PlaylistComponent implements OnInit {
-  // Inyecciones modernas
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private playlistService = inject(PlaylistService);
-  private playerService = inject(PlayerService); // <--- NUEVO
+  private playerService = inject(PlayerService);
 
   playlist: PlaylistResponse | null = null;
   loading: boolean = true;
   errorMessage: string = '';
   moodName: string = '';
   intensity: number = 3;
+  audience: string = 'ADULT'; //
 
   ngOnInit() {
-    // Usamos switchMap para limpiar suscripciones anidadas (Nivel Pro)
+    
     this.route.params.pipe(
       switchMap(params => {
         this.moodName = params['mood'];
@@ -53,6 +53,7 @@ export class PlaylistComponent implements OnInit {
     ).subscribe({
       next: (qParams) => {
         this.intensity = qParams['intensity'] || 3;
+        this.audience = qParams['audience'] || 'ADULT'; // 
         this.loadPlaylist();
       }
     });
@@ -60,18 +61,21 @@ export class PlaylistComponent implements OnInit {
 
   loadPlaylist() {
     this.loading = true;
-    this.playlistService.getPlaylist(this.moodName).subscribe({
+    this.errorMessage = ''; 
+    
+    
+    this.playlistService.getPlaylist(this.moodName, this.audience).subscribe({
       next: (playlist) => {
         this.playlist = playlist;
         this.loading = false;
       },
-      error: () => {
-        this.errorMessage = 'Error al cargar la playlist';
+      error: (err) => {
+        console.error('Error cargando playlist:', err);
+        this.errorMessage = 'No se encontraron canciones para este perfil. Intenta actualizar.';
         this.loading = false;
       }
     });
   }
-
 
   openTrack(track: Track) {
     this.playerService.playTrack(track);
@@ -79,9 +83,13 @@ export class PlaylistComponent implements OnInit {
 
   refreshPlaylist() {
     this.loading = true;
-    this.playlistService.refreshPlaylist(this.moodName).subscribe({
+    
+    this.playlistService.refreshPlaylist(this.moodName, this.audience).subscribe({
       next: () => this.loadPlaylist(),
-      error: () => this.loading = false
+      error: () => {
+        this.errorMessage = 'Error al conectar con YouTube';
+        this.loading = false;
+      }
     });
   }
 

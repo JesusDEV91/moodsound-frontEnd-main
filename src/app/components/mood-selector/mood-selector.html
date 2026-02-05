@@ -5,12 +5,35 @@
       <button mat-icon-button (click)="goBack()" class="back-button">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1 class="title"><mat-icon class="title-icon">music_note</mat-icon> ¿Cómo te sientes?</h1>
+      <h1 class="title"><mat-icon class="title-icon">music_note</mat-icon> MoodSound</h1>
     </div>
 
-    
+    <div class="audience-section">
+      <p class="instruction">¿Quién va a escuchar la música?</p>
+      <div class="audience-options">
+        <button 
+          type="button" 
+          class="audience-card" 
+          [class.selected]="selectedAudience === 'ADULT'"
+          (click)="setAudience('ADULT')">
+          <mat-icon>person</mat-icon>
+          <span>Adulto</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="audience-card" 
+          [class.selected]="selectedAudience === 'KIDS'"
+          (click)="setAudience('KIDS')">
+          <mat-icon>child_care</mat-icon>
+          <span>Infantil</span>
+        </button>
+      </div>
+    </div>
+    <div class="divider-line"></div>
+
     <div class="text-input-section">
-      <p class="instruction">Escribe cómo te sientes en texto libre:</p>
+      <p class="instruction">Describe cómo te sientes:</p>
       
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Ejemplo: "Estoy muy feliz hoy"</mat-label>
@@ -28,22 +51,20 @@
         class="analyze-button"
         (click)="analyzeText()"
         [disabled]="loading || !userText.trim()">
-        <mat-icon *ngIf="!loading">search</mat-icon>
         <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
-        <span *ngIf="!loading">Analizar</span>
+        <mat-icon *ngIf="!loading">psychology</mat-icon>
+        <span *ngIf="!loading">Analizar mi ánimo</span>
         <span *ngIf="loading">Analizando...</span>
       </button>
 
-  
       <div *ngIf="errorMessage" class="error-message">
-        <mat-icon>info</mat-icon>
+        <mat-icon>error_outline</mat-icon>
         <span>{{ errorMessage }}</span>
       </div>
     </div>
 
-    
     <div class="divider">
-      <span>  O selecciona directamente  </span>
+      <span> O selecciona un emoji </span>
     </div>
 
     <div *ngIf="fetchingMoods" class="moods-skeletons">
@@ -56,11 +77,11 @@
         mat-stroked-button
         class="mood-button"
         (click)="selectMood(mood.name)"
-        aria-label="Seleccionar {{ mood.displayName }}">
-        <span class="mood-emoji" aria-hidden="true">{{ mood.emoji }}</span>
-        <span class="mood-color" [style.background-color]="mood.color" aria-hidden="true"></span>
+        [style.border-left-color]="mood.color">
+        <span class="mood-emoji">{{ mood.emoji }}</span>
         <span class="mood-name">{{ mood.displayName }}</span>
       </button>
     </div>
+
   </div>
 </div>

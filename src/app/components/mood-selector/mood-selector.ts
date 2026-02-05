@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSliderModule } from '@angular/material/slider'; // <-- AÑADIDO
+import { MatSliderModule } from '@angular/material/slider';
 import { MoodService } from '../../services/mood.service';
 import { Mood } from '../../models/mood.model';
 
@@ -22,14 +22,18 @@ import { Mood } from '../../models/mood.model';
     MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSliderModule // <-- AÑADIDO
+    MatSliderModule
   ],
   templateUrl: './mood-selector.html',
   styleUrls: ['./mood-selector.css']
 })
 export class MoodSelectorComponent implements OnInit {
   userText: string = '';
-  intensityValue: number = 3; // <-- NUEVA VARIABLE PARA EL SLIDER
+  intensityValue: number = 3;
+  
+  // NUEVO: Variable para controlar la audiencia (Adulto por defecto)
+  selectedAudience: 'ADULT' | 'KIDS' = 'ADULT'; 
+
   moods: Mood[] = [];
   loading: boolean = false;
   fetchingMoods: boolean = true;
@@ -59,6 +63,11 @@ export class MoodSelectorComponent implements OnInit {
     });
   }
 
+  // Método para cambiar la audiencia desde el HTML
+  setAudience(audience: 'ADULT' | 'KIDS') {
+    this.selectedAudience = audience;
+  }
+
   analyzeText() {
     if (!this.userText.trim()) {
       this.errorMessage = 'Por favor, escribe cómo te sientes';
@@ -68,33 +77,43 @@ export class MoodSelectorComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    // MODIFICADO: Enviamos también la intensidad
+    // MODIFICADO: Enviamos intensidad y audiencia al backend
     const request = { 
       text: this.userText, 
-      intensity: this.intensityValue 
+      intensity: this.intensityValue,
+      audience: this.selectedAudience 
     };
 
     this.moodService.analyzeMood(request).subscribe({
       next: (response) => {
         this.loading = false;
         if (response.detected && response.mood) {
-          // Si tu backend soporta intensidad, podrías pasarla también por la URL
-          this.router.navigate(['/playlist', response.mood], { queryParams: { intensity: this.intensityValue }});
+          // Navegamos pasando AMBOS parámetros en la URL
+          this.router.navigate(['/playlist', response.mood], { 
+            queryParams: { 
+              intensity: this.intensityValue,
+              audience: this.selectedAudience 
+            }
+          });
         } else {
           this.errorMessage = response.message || 'No se pudo detectar tu estado de ánimo';
         }
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error analyzing mood:', error);
         this.errorMessage = 'Error al analizar el texto';
       }
     });
   }
 
   selectMood(moodName: string) {
-
-    this.router.navigate(['/playlist', moodName], { queryParams: { intensity: this.intensityValue }});
+    
+    this.router.navigate(['/playlist', moodName], { 
+      queryParams: { 
+        intensity: this.intensityValue,
+        audience: this.selectedAudience 
+      }
+    });
   }
 
   goBack() {

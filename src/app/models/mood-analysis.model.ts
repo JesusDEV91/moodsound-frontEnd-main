@@ -1,6 +1,8 @@
 export interface MoodAnalysisRequest {
-  text?: string;
-  moodOption?: string;
+  text: string;           
+  intensity: number;      
+  audience: string;       
+  moodOption?: string;    
 }
 
 export interface MoodAnalysisResponse {
