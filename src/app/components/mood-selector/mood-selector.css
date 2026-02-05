@@ -12,8 +12,10 @@
 }
 
 .mood-selector-card {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
   border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 40px;
   max-width: min(1100px, 96%);
   width: 100%;
@@ -262,21 +264,87 @@
 }
 
 .audience-card {
-  all: unset; /* Limpiamos estilos de botón por defecto */
+  all: unset;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  width: 110px;
-  border-radius: 20px;
+  padding: 20px;
+  width: 120px;
+  border-radius: 24px;
+  background: #ffffff;
+  border: 2px solid #f1f5f9;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+.header-text {
+  margin-bottom: 20px;
+}
+.audience-subtitle.kids-mode {
+  color: #10b981; 
+  font-weight: 600;
+}
+.icon-wrapper {
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #f8fafc;
-  border: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #64748b;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+.audience-card.adult.selected {
+  border-color: #6366f1;
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(99, 102, 241, 0.15);
 }
 
+.audience-card.adult.selected .icon-wrapper {
+  background: #6366f1;
+}
+
+.audience-card.adult.selected mat-icon,
+.audience-card.adult.selected span {
+  color: #6366f1;
+  font-weight: 700;
+}
+
+/* ESTADO SELECCIONADO: INFANTIL (Rosa/Naranja) */
+.audience-card.kids.selected {
+  border-color: #10b981; 
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(16, 185, 129, 0.15);
+}
+
+.audience-card.kids.selected .icon-wrapper {
+  background: #10b981;
+}
+
+.audience-card.kids.selected mat-icon,
+.audience-card.kids.selected span {
+  color: #10b981;
+  font-weight: 700;
+}
+
+/* Icono en blanco cuando está seleccionado */
+.audience-card.selected mat-icon {
+  color: white !important;
+}
+
+/* Hover suave */
+.audience-card:hover:not(.selected) {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.audience-card mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: #64748b;
+}
 .audience-card mat-icon {
   font-size: 32px;
   width: 32px;
@@ -297,6 +365,7 @@
   color: #6366f1;
   box-shadow: 0 10px 20px rgba(99, 102, 241, 0.1);
   transform: translateY(-4px);
+  animation: bounce 0.4s cubic-bezier(0.36, 0, 0.66, -0.56);
 }
 
 .audience-card.selected mat-icon {
@@ -310,6 +379,66 @@
   border-color: #cbd5e1;
 }
 
+
+.adult-bg {
+  background: radial-gradient(circle at 0% 0%, rgba(79, 70, 229, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.1) 0%, transparent 50%),
+              #f1f5f9; 
+}
+
+
+.kids-bg {
+  background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(20, 184, 166, 0.04) 0%, transparent 50%),
+              #f0fdf4; /* Un blanco con un toque verdoso muy ligero */
+}
+
+/* Transición suave para que no pegue un salto */
+.mood-selector-container {
+  transition: background 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Animación de escaneo para la tarjeta */
+.analyzing-active {
+  position: relative;
+  overflow: hidden;
+}
+
+.analyzing-active::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(99, 102, 241, 0.05),
+    transparent
+  );
+  animation: scan 2s linear infinite;
+}
+/* El icono brilla cuando el usuario escribe */
+mat-form-field.mat-focused mat-icon[matSuffix] {
+  color: #6366f1 !important;
+  transform: rotate(-10deg) scale(1.2);
+  transition: all 0.3s ease;
+}
+
+/* Bordes más suaves para el input */
+.full-width ::ng-deep .mdc-notched-outline__crest {
+  border-radius: 12px 0 0 12px !important;
+}
+@keyframes scan {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
 /* Ajuste para móviles */
 @media (max-width: 650px) {
   .audience-options {
@@ -320,3 +449,9 @@
     padding: 12px;
   }
 }
+@keyframes bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1.05); }
+}
+

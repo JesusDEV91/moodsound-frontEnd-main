@@ -1,60 +1,68 @@
-<div class="mood-selector-container">
-  <div class="mood-selector-card">
+<div class="mood-selector-container" [ngClass]="getBackgroundClass()">
+
+  <div class="mood-selector-card" [class.analyzing-active]="loading">
 
     <div class="header">
-      <button mat-icon-button (click)="goBack()" class="back-button">
+      <button mat-icon-button (click)="goBack()" class="back-button" matTooltip="Volver al inicio">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h1 class="title"><mat-icon class="title-icon">music_note</mat-icon> MoodSound</h1>
+      <h1 class="title">
+        <mat-icon class="title-icon">music_note</mat-icon>
+        MoodSound
+      </h1>
     </div>
 
     <div class="audience-section">
-      <p class="instruction">¿Quién va a escuchar la música?</p>
+      <div class="header-text">
+        <p class="instruction">¿Quién va a escuchar la música?</p>
+        <p class="audience-subtitle" [ngClass]="{'kids-mode': selectedAudience === 'KIDS'}">
+          {{ selectedAudience === 'ADULT' ? 'Perfil estándar activado' : '¡Modo energía infantil activado! ✨' }}
+        </p>
+      </div>
+
       <div class="audience-options">
-        <button 
-          type="button" 
-          class="audience-card" 
-          [class.selected]="selectedAudience === 'ADULT'"
+        <button type="button" class="audience-card adult" [class.selected]="selectedAudience === 'ADULT'"
           (click)="setAudience('ADULT')">
-          <mat-icon>person</mat-icon>
+          <div class="icon-wrapper">
+            <mat-icon>person</mat-icon>
+          </div>
           <span>Adulto</span>
         </button>
 
-        <button 
-          type="button" 
-          class="audience-card" 
-          [class.selected]="selectedAudience === 'KIDS'"
+        <button type="button" class="audience-card kids" [class.selected]="selectedAudience === 'KIDS'"
           (click)="setAudience('KIDS')">
-          <mat-icon>child_care</mat-icon>
+          <div class="icon-wrapper">
+            <mat-icon>child_care</mat-icon>
+          </div>
           <span>Infantil</span>
         </button>
       </div>
     </div>
+
     <div class="divider-line"></div>
 
     <div class="text-input-section">
       <p class="instruction">Describe cómo te sientes:</p>
-      
+
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Ejemplo: "Estoy muy feliz hoy"</mat-label>
-        <input 
-          matInput 
-          [(ngModel)]="userText" 
-          (keyup.enter)="analyzeText()"
-          placeholder="Escribe aquí...">
+        <input matInput [(ngModel)]="userText" (keyup.enter)="analyzeText()" placeholder="Escribe aquí..."
+          [disabled]="loading">
         <mat-icon matSuffix>edit</mat-icon>
       </mat-form-field>
 
-      <button 
-        mat-raised-button 
-        color="primary" 
-        class="analyze-button"
-        (click)="analyzeText()"
+      <button mat-raised-button class="analyze-button"
+        [style.background]="selectedAudience === 'KIDS' ? '#10b981' : '#6366f1'" (click)="analyzeText()"
         [disabled]="loading || !userText.trim()">
-        <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
-        <mat-icon *ngIf="!loading">psychology</mat-icon>
-        <span *ngIf="!loading">Analizar mi ánimo</span>
-        <span *ngIf="loading">Analizando...</span>
+
+        <mat-spinner *ngIf="loading" diameter="22" color="accent"></mat-spinner>
+
+        <ng-container *ngIf="!loading">
+          <mat-icon>psychology</mat-icon>
+          <span>Analizar mi ánimo</span>
+        </ng-container>
+
+        <span *ngIf="loading" class="loading-text">Analizando sentimiento...</span>
       </button>
 
       <div *ngIf="errorMessage" class="error-message">
@@ -64,7 +72,7 @@
     </div>
 
     <div class="divider">
-      <span> O selecciona un emoji </span>
+      <span class="divider-text"> O elige directamente un estado </span>
     </div>
 
     <div *ngIf="fetchingMoods" class="moods-skeletons">
@@ -72,12 +80,9 @@
     </div>
 
     <div class="moods-grid" *ngIf="!fetchingMoods">
-      <button 
-        *ngFor="let mood of moods"
-        mat-stroked-button
-        class="mood-button"
-        (click)="selectMood(mood.name)"
-        [style.border-left-color]="mood.color">
+      <button *ngFor="let mood of moods; let i = index" mat-stroked-button class="mood-button"
+        (click)="selectMood(mood.name)" [style.border-left]="'5px solid ' + mood.color"
+        [style.animation-delay]="(i * 0.05) + 's'">
         <span class="mood-emoji">{{ mood.emoji }}</span>
         <span class="mood-name">{{ mood.displayName }}</span>
       </button>

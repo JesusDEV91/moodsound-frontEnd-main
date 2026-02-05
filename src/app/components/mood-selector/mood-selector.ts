@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSliderModule } from '@angular/material/slider';
+// MatSliderModule eliminado
 import { MoodService } from '../../services/mood.service';
 import { Mood } from '../../models/mood.model';
 
@@ -21,17 +21,14 @@ import { Mood } from '../../models/mood.model';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatProgressSpinnerModule,
-    MatSliderModule
+    MatProgressSpinnerModule
   ],
   templateUrl: './mood-selector.html',
   styleUrls: ['./mood-selector.css']
 })
 export class MoodSelectorComponent implements OnInit {
   userText: string = '';
-  intensityValue: number = 3;
-  
-  // NUEVO: Variable para controlar la audiencia (Adulto por defecto)
+  intensityValue: number = 3; 
   selectedAudience: 'ADULT' | 'KIDS' = 'ADULT'; 
 
   moods: Mood[] = [];
@@ -63,7 +60,6 @@ export class MoodSelectorComponent implements OnInit {
     });
   }
 
-  // Método para cambiar la audiencia desde el HTML
   setAudience(audience: 'ADULT' | 'KIDS') {
     this.selectedAudience = audience;
   }
@@ -77,7 +73,6 @@ export class MoodSelectorComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    // MODIFICADO: Enviamos intensidad y audiencia al backend
     const request = { 
       text: this.userText, 
       intensity: this.intensityValue,
@@ -88,7 +83,6 @@ export class MoodSelectorComponent implements OnInit {
       next: (response) => {
         this.loading = false;
         if (response.detected && response.mood) {
-          // Navegamos pasando AMBOS parámetros en la URL
           this.router.navigate(['/playlist', response.mood], { 
             queryParams: { 
               intensity: this.intensityValue,
@@ -107,7 +101,6 @@ export class MoodSelectorComponent implements OnInit {
   }
 
   selectMood(moodName: string) {
-    
     this.router.navigate(['/playlist', moodName], { 
       queryParams: { 
         intensity: this.intensityValue,
@@ -119,4 +112,7 @@ export class MoodSelectorComponent implements OnInit {
   goBack() {
     this.router.navigate(['/']);
   }
+  getBackgroundClass() {
+  return this.selectedAudience === 'KIDS' ? 'kids-bg' : 'adult-bg';
+}
 }

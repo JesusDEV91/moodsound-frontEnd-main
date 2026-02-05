@@ -5,8 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import { switchMap } from 'rxjs';
+import { switchMap, finalize } from 'rxjs/operators';
 
 // Servicios
 import { PlaylistService } from '../../services/playlist.service';
@@ -25,6 +26,7 @@ import { Track } from '../../models/track.model';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     YouTubePlayerModule
   ],
   templateUrl: './playlist.html',
@@ -36,15 +38,18 @@ export class PlaylistComponent implements OnInit {
   private playlistService = inject(PlaylistService);
   private playerService = inject(PlayerService);
 
+  // Variables de estado
   playlist: PlaylistResponse | null = null;
   loading: boolean = true;
+  refreshing: boolean = false;
   errorMessage: string = '';
+  
+  // Parámetros
   moodName: string = '';
   intensity: number = 3;
-  audience: string = 'ADULT'; //
+  audience: string = 'ADULT';
 
   ngOnInit() {
-    
     this.route.params.pipe(
       switchMap(params => {
         this.moodName = params['mood'];
@@ -53,7 +58,7 @@ export class PlaylistComponent implements OnInit {
     ).subscribe({
       next: (qParams) => {
         this.intensity = qParams['intensity'] || 3;
-        this.audience = qParams['audience'] || 'ADULT'; // 
+        this.audience = qParams['audience'] || 'ADULT';
         this.loadPlaylist();
       }
     });
@@ -61,18 +66,36 @@ export class PlaylistComponent implements OnInit {
 
   loadPlaylist() {
     this.loading = true;
-    this.errorMessage = ''; 
+    this.errorMessage = '';
     
-    
-    this.playlistService.getPlaylist(this.moodName, this.audience).subscribe({
-      next: (playlist) => {
-        this.playlist = playlist;
-        this.loading = false;
-      },
+    this.playlistService.getPlaylist(this.moodName, this.audience)
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.refreshing = false;
+        })
+      )
+      .subscribe({
+        next: (playlist) => this.playlist = playlist,
+        error: (err) => {
+          console.error('Error:', err);
+          this.errorMessage = 'No se encontraron canciones. ¡Prueba a actualizar!';
+        }
+      });
+  }
+
+  refreshPlaylist() {
+    this.refreshing = true;
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.playlistService.refreshPlaylist(this.moodName, this.audience).subscribe({
+      next: () => this.loadPlaylist(),
       error: (err) => {
-        console.error('Error cargando playlist:', err);
-        this.errorMessage = 'No se encontraron canciones para este perfil. Intenta actualizar.';
+        console.error('Error:', err);
+        this.errorMessage = 'Error al conectar con YouTube.';
         this.loading = false;
+        this.refreshing = false;
       }
     });
   }
@@ -81,18 +104,13 @@ export class PlaylistComponent implements OnInit {
     this.playerService.playTrack(track);
   }
 
-  refreshPlaylist() {
-    this.loading = true;
-    
-    this.playlistService.refreshPlaylist(this.moodName, this.audience).subscribe({
-      next: () => this.loadPlaylist(),
-      error: () => {
-        this.errorMessage = 'Error al conectar con YouTube';
-        this.loading = false;
-      }
-    });
+  getMoodColor(): string {
+    return this.playlist?.color || '#6366f1';
   }
 
-  goBack() { this.router.navigate(['/mood-selector']); }
+  goBack() { 
+    this.router.navigate(['/mood-selector'], { queryParams: { audience: this.audience } }); 
+  }
+  
   goHome() { this.router.navigate(['/']); }
 }

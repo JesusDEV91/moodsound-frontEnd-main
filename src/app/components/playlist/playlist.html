@@ -1,95 +1,82 @@
-<div class="playlist-container">
-  <div class="playlist-content">
-    <div class="playlist-card">
-      
-      <div class="header">
-        <button mat-icon-button (click)="goBack()" class="back-button">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-
-        <div class="header-info" *ngIf="playlist">
-          <div class="title-row">
-            <div class="playlist-emoji" aria-hidden="true">{{ playlist.emoji }}</div>
-            <div class="playlist-swatch" [style.background-color]="playlist.color" aria-hidden="true"></div>
-            <div>
-              <h1 class="playlist-title">{{ playlist.displayName }}</h1>
-              <p class="playlist-count">{{ playlist.tracks.length || 0 }} canciones</p>
-            </div>
-          </div>
-        </div>
-
-        <button mat-icon-button (click)="goHome()" class="home-button">
-          <mat-icon>home</mat-icon>
-        </button>
-      </div>
-
-      <div *ngIf="loading" class="loading-container">
-        <div class="skeleton-list">
-          <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]">
-            <div class="skeleton-thumb"></div>
-            <div class="skeleton-lines">
-              <div class="skeleton-line short"></div>
-              <div class="skeleton-line"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="errorMessage && !loading" class="error-container">
-        <mat-icon>error</mat-icon>
-        <p>{{ errorMessage }}</p>
-        <button mat-raised-button color="warn" (click)="loadPlaylist()">
-          Reintentar
-        </button>
-      </div>
-
-      <div *ngIf="playlist && !loading" class="playlist-list">
-        
-        <div class="controls-row">
-          <button 
-            mat-stroked-button 
-            class="refresh-button"
-            (click)="refreshPlaylist()">
-            <mat-icon>refresh</mat-icon>
-            Actualizar
-          </button>
-        </div>
-
-        <mat-card *ngFor="let track of playlist.tracks" class="track-card">
-          <div class="track-emoji" aria-hidden="true">{{ playlist.emoji }}</div>
-
-          <div class="track-thumbnail">
-            <img 
-              [src]="track.thumbnailUrl" 
-              [alt]="track.title"
-              *ngIf="track.thumbnailUrl">
-            <div class="no-image" *ngIf="!track.thumbnailUrl">
-              <mat-icon>music_note</mat-icon>
-            </div>
-          </div>
-
-          <div class="track-info">
-            <h3>{{ track.title }}</h3>
-            <p>{{ track.artist }}</p>
-          </div>
-
-          <button 
-            mat-icon-button 
-            color="primary"
-            (click)="openTrack(track)"
-            class="play-button">
-            <mat-icon>play_circle_filled</mat-icon>
-          </button>
-        </mat-card>
-
-        <div *ngIf="playlist.tracks.length === 0" class="empty-message">
-          <mat-icon>music_off</mat-icon>
-          <p>No hay canciones en esta playlist</p>
-          <button mat-stroked-button color="primary" (click)="refreshPlaylist()">
-            Buscar canciones
-          </button>
+<div class="playlist-page" [style.border-top-color]="getMoodColor()">
+  
+  <header class="playlist-header">
+    <div class="header-left">
+      <button mat-icon-button (click)="goBack()" class="btn-back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="mood-info" *ngIf="playlist">
+        <span class="mood-emoji">{{ playlist.emoji }}</span>
+        <div>
+          <h1 class="mood-title">{{ playlist.displayName }}</h1>
+          <p class="audience-tag" [ngClass]="audience.toLowerCase()">
+            {{ audience === 'KIDS' ? 'Modo Infantil ✨' : 'Perfil Adulto' }}
+          </p>
         </div>
       </div>
     </div>
+
+    <div class="header-actions">
+      <button mat-flat-button 
+              class="btn-refresh" 
+              (click)="refreshPlaylist()" 
+              [disabled]="loading">
+        <mat-icon [class.spinning]="refreshing">refresh</mat-icon>
+        <span>{{ refreshing ? 'Buscando...' : 'Actualizar' }}</span>
+      </button>
+      
+      <button mat-icon-button (click)="goHome()" class="btn-home">
+        <mat-icon>home</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <div class="error-container" *ngIf="errorMessage">
+    <mat-icon>sentiment_very_dissatisfied</mat-icon>
+    <p>{{ errorMessage }}</p>
+    <button mat-stroked-button (click)="refreshPlaylist()">Reintentar conexión</button>
   </div>
+
+  <div class="tracks-container" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5]">
+      <div class="skeleton-thumb"></div>
+      <div class="skeleton-details">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line artist"></div>
+      </div>
+      <div class="skeleton-btn"></div>
+    </div>
+  </div>
+
+  <main class="tracks-container" *ngIf="!loading && playlist">
+    <div class="track-card" 
+         *ngFor="let track of playlist.tracks; let i = index"
+         (click)="openTrack(track)"
+         [style.animation-delay]="(i * 0.05) + 's'">
+      
+      <div class="track-thumb">
+        <img [src]="track.thumbnailUrl" [alt]="track.title">
+        <div class="play-overlay">
+          <mat-icon>play_arrow</mat-icon>
+        </div>
+      </div>
+
+      <div class="track-details">
+        <h3 class="track-title">{{ track.title }}</h3>
+        <p class="track-artist">{{ track.artist }}</p>
+      </div>
+
+      <button mat-icon-button class="btn-play-mini">
+        <mat-icon>play_circle_outline</mat-icon>
+      </button>
+    </div>
+
+    <div class="empty-state" *ngIf="playlist.tracks.length === 0">
+      <mat-icon>library_music</mat-icon>
+      <p>No hay canciones guardadas para este ánimo.</p>
+      <button mat-raised-button color="primary" (click)="refreshPlaylist()">
+        Buscar en YouTube ahora
+      </button>
+    </div>
+  </main>
 </div>
