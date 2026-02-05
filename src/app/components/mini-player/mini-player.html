@@ -1,0 +1,22 @@
+<div class="mini-player-fixed" *ngIf="playerService.currentTrack() as track">
+  <div class="player-card">
+    <div class="video-container">
+      <youtube-player 
+        [videoId]="track.youtubeId" 
+        [height]="140" 
+        [width]="240">
+      </youtube-player>
+    </div>
+    
+    <div class="player-content">
+      <div class="track-details">
+        <h4 class="track-title">{{ track.title }}</h4>
+        <p class="track-artist">{{ track.artist }}</p>
+      </div>
+      
+      <button mat-icon-button color="warn" (click)="playerService.closePlayer()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

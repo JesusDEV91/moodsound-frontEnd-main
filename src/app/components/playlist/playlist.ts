@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -7,9 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
+// Servicios
 import { PlaylistService } from '../../services/playlist.service';
+import { PlayerService } from '../../services/player.service'; // <--- NUEVO
+
+// Modelos
 import { PlaylistResponse } from '../../models/playlist.model';
 import { Track } from '../../models/track.model';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-playlist',
@@ -26,26 +31,30 @@ import { Track } from '../../models/track.model';
   styleUrls: ['./playlist.css']
 })
 export class PlaylistComponent implements OnInit {
+  // Inyecciones modernas
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private playlistService = inject(PlaylistService);
+  private playerService = inject(PlayerService); // <--- NUEVO
+
   playlist: PlaylistResponse | null = null;
   loading: boolean = true;
   errorMessage: string = '';
   moodName: string = '';
   intensity: number = 3;
-  currentTrack: Track | null = null;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private playlistService: PlaylistService
-  ) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.moodName = params['mood'];
-      this.route.queryParams.subscribe(qParams => {
+    // Usamos switchMap para limpiar suscripciones anidadas (Nivel Pro)
+    this.route.params.pipe(
+      switchMap(params => {
+        this.moodName = params['mood'];
+        return this.route.queryParams;
+      })
+    ).subscribe({
+      next: (qParams) => {
         this.intensity = qParams['intensity'] || 3;
         this.loadPlaylist();
-      });
+      }
     });
   }
 
@@ -63,12 +72,9 @@ export class PlaylistComponent implements OnInit {
     });
   }
 
-  openTrack(track: Track) {
-    this.currentTrack = track;
-  }
 
-  closePlayer() {
-    this.currentTrack = null;
+  openTrack(track: Track) {
+    this.playerService.playTrack(track);
   }
 
   refreshPlaylist() {

@@ -1,15 +1,26 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-
+// Ajusta la ruta según donde creaste la carpeta finalmente
+import { MiniPlayerComponent } from './components/mini-player/mini-player'; 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule, MatIconModule],
+  standalone: true,
+  imports: [
+    RouterOutlet, 
+    MiniPlayerComponent // <--- ESTO ES LO QUE SOLUCIONA EL ERROR
+  ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('moodsound-frontend');
+export class AppComponent implements OnInit {
+  
+  ngOnInit() {
+    // Esto asegura que el reproductor de YouTube funcione globalmente
+    if (!window['YT']) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+    }
+  }
 }
