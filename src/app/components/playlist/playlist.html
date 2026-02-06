@@ -7,7 +7,7 @@
       </button>
       <div class="mood-info" *ngIf="playlist">
         <span class="mood-emoji">{{ playlist.emoji }}</span>
-        <div>
+        <div class="mood-text-group">
           <h1 class="mood-title">{{ playlist.displayName }}</h1>
           <p class="audience-tag" [ngClass]="audience.toLowerCase()">
             {{ audience === 'KIDS' ? 'Modo Infantil ✨' : 'Perfil Adulto' }}
@@ -25,7 +25,7 @@
         <span>{{ refreshing ? 'Buscando...' : 'Actualizar' }}</span>
       </button>
       
-      <button mat-icon-button (click)="goHome()" class="btn-home">
+      <button mat-icon-button (click)="goHome()" class="btn-home" matTooltip="Ir al inicio">
         <mat-icon>home</mat-icon>
       </button>
     </div>
@@ -78,5 +78,36 @@
         Buscar en YouTube ahora
       </button>
     </div>
+
+    <div class="footer-spacing"></div>
   </main>
+
+  <div class="floating-player" 
+       cdkDrag 
+       *ngIf="currentTrack()" 
+       [class.is-minimized]="isMinimized">
+    
+    <div class="player-handle" cdkDragHandle>
+      <mat-icon class="drag-icon">drag_indicator</mat-icon>
+      <span class="player-status">Reproduciendo: {{ currentTrack()?.title }}</span>
+      
+      <div class="player-actions">
+        <button mat-icon-button (click)="isMinimized = !isMinimized" class="btn-toggle">
+          <mat-icon>{{ isMinimized ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+        <button mat-icon-button (click)="closePlayer()" class="btn-close">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="player-content" *ngIf="!isMinimized">
+      <youtube-player 
+        [videoId]="currentTrack()?.youtubeId" 
+        [width]="300" 
+        [height]="168">
+      </youtube-player>
+    </div>
+  </div>
+
 </div>

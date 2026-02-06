@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PlaylistComponent } from './playlist.ts';
+import { PlaylistComponent } from './playlist';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { YouTubePlayerModule } from '@angular/youtube-player';
