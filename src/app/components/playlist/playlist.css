@@ -1,12 +1,11 @@
-/* =========================================
-   1. CABECERA (Alineación y Tamaños)
-   ========================================= */
+
 .playlist-page {
   min-height: 100vh;
   background: #f8fafc;
   padding: 20px;
   border-top: 6px solid #6366f1;
 }
+
 
 .playlist-header {
   display: flex;
@@ -33,7 +32,7 @@
   line-height: 1.2;
 }
 
-/* BOTONES SUPERIORES IGUALADOS */
+
 .btn-refresh {
   height: 40px !important;
   border-radius: 10px !important;
@@ -42,17 +41,22 @@
   font-size: 0.85rem !important;
 }
 
+
 .btn-home {
-  width: 40px !important;
-  height: 40px !important;
-  background-color: #f1f5f9 !important;
-  color: #64748b !important;
-  border-radius: 10px !important;
+  width: 42px !important;
+  height: 42px !important;
+  background-color: #eef2ff !important; 
+  color: #6366f1 !important; 
+  border-radius: 50% !important; 
   display: flex !important;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+  transition: all 0.3s ease !important;
+  border: 1px solid rgba(99, 102, 241, 0.1) !important;
 }
 
+<<<<<<< HEAD
 /* =========================================
    2. TARJETAS DE CANCIONES (Play al final + Favoritos)
    ========================================= */
@@ -60,6 +64,26 @@
   display: flex;
   align-items: center;
   padding: 10px 15px;
+=======
+.btn-home:hover {
+  background-color: #6366f1 !important; 
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-home mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+
+.track-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px; 
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
   background: white;
   border-radius: 14px;
   margin-bottom: 10px;
@@ -75,7 +99,11 @@
 }
 
 .track-thumb {
+<<<<<<< HEAD
   width: 50px;
+=======
+  width: 50px; 
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
   height: 50px;
   position: relative;
   flex-shrink: 0;
@@ -117,6 +145,7 @@
 }
 
 .track-details {
+<<<<<<< HEAD
   flex: 1;
   margin-left: 15px;
   overflow: hidden;
@@ -125,20 +154,38 @@
 
 .track-title {
   font-size: 0.88rem;
+=======
+  flex: 1; 
+  margin-left: 15px;
+  overflow: hidden; 
+}
+
+.track-title {
+  font-size: 0.88rem; 
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
   font-weight: 600;
   margin: 0;
   color: #1e293b;
   white-space: nowrap;
   overflow: hidden;
+<<<<<<< HEAD
   text-overflow: ellipsis;
 }
 
 .track-artist {
   font-size: 0.75rem;
+=======
+  text-overflow: ellipsis; 
+}
+
+.track-artist {
+  font-size: 0.75rem; 
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
   color: #64748b;
   margin: 2px 0 0 0;
 }
 
+<<<<<<< HEAD
 /* =========================================
    3. BOTONES DE ACCIONES (Favorito + Play)
    ========================================= */
@@ -187,14 +234,29 @@
   color: #6366f1 !important;
   width: 36px !important;
   height: 36px !important;
+=======
+.btn-play-mini {
+  margin-left: auto; 
+  color: #6366f1;
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
 }
 
-.btn-play-mini mat-icon {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
+
+.floating-player {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999; 
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  width: 320px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  
 }
 
+<<<<<<< HEAD
 .btn-play-mini:hover {
   color: #4f46e5 !important;
   transform: scale(1.05);
@@ -203,11 +265,57 @@
 /* =========================================
    4. ANIMACIONES
    ========================================= */
+=======
+.player-handle {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background: #f8fafc;
+  cursor: move; 
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.drag-icon {
+  color: #94a3b8;
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.player-status {
+  flex: 1;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #475569;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.player-content {
+  background: black;
+  line-height: 0;
+}
+
+.footer-spacing {
+  height: 150px; 
+}
+
+
+.spinning { animation: rotate 1s linear infinite; }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+<<<<<<< HEAD
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -225,6 +333,8 @@
 /* =========================================
    5. ETIQUETAS Y ESTADOS
    ========================================= */
+=======
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
 .audience-tag {
   font-size: 0.65rem;
   font-weight: 700;
@@ -232,6 +342,7 @@
   border-radius: 4px;
   text-transform: uppercase;
 }
+<<<<<<< HEAD
 
 .audience-tag.adult { 
   background: #e0e7ff; 
@@ -371,3 +482,25 @@ button {
 button::-webkit-details-marker { 
   display: none; 
 }
+=======
+.audience-tag.adult { background: #e0e7ff; color: #4338ca; }
+.audience-tag.kids { background: #dcfce7; color: #059669; }
+
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 16px;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+
+.cdk-drag-placeholder {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+>>>>>>> a2a4d270ec2cc0200aed479c42b0daf6de597c33
