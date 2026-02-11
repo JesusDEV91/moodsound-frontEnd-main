@@ -8,13 +8,7 @@
 
     <!-- Menú de navegación -->
     <div class="navbar-menu">
-      <button 
-        mat-button 
-        routerLink="/mood-selector"
-        routerLinkActive="active">
-        <mat-icon>search</mat-icon>
-        Explorar
-      </button>
+     
 
       <!-- Si está autenticado -->
       <ng-container *ngIf="authService.isAuthenticated()">
