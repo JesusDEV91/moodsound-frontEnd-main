@@ -6,16 +6,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { switchMap, finalize } from 'rxjs/operators';
 
 // Servicios
 import { PlaylistService } from '../../services/playlist.service';
 import { PlayerService } from '../../services/player.service';
+import { FavoriteService } from '../../services/favorite.service';
+import { AuthService } from '../../services/auth.service';
+
+// Componentes
+import { NavbarComponent } from '../navbar/navbar';
 
 // Modelos
 import { PlaylistResponse } from '../../models/playlist.model';
-import { Track } from '../../models/track.model';
+import { Track, TrackWithFavorite } from '../../models/track.model';
 
 @Component({
   selector: 'app-playlist',
@@ -27,7 +33,9 @@ import { Track } from '../../models/track.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    YouTubePlayerModule
+    MatSnackBarModule,
+    YouTubePlayerModule,
+    NavbarComponent
   ],
   templateUrl: './playlist.html',
   styleUrls: ['./playlist.css']
@@ -37,14 +45,15 @@ export class PlaylistComponent implements OnInit {
   private router = inject(Router);
   private playlistService = inject(PlaylistService);
   private playerService = inject(PlayerService);
+  private favoriteService = inject(FavoriteService);
+  authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
-  // Variables de estado
   playlist: PlaylistResponse | null = null;
   loading: boolean = true;
   refreshing: boolean = false;
   errorMessage: string = '';
   
-  // Parámetros
   moodName: string = '';
   intensity: number = 3;
   audience: string = 'ADULT';
@@ -62,6 +71,11 @@ export class PlaylistComponent implements OnInit {
         this.loadPlaylist();
       }
     });
+
+    // Cargar favoritos si está autenticado
+    if (this.authService.isAuthenticated()) {
+      this.favoriteService.getFavorites().subscribe();
+    }
   }
 
   loadPlaylist() {
@@ -100,8 +114,70 @@ export class PlaylistComponent implements OnInit {
     });
   }
 
-  openTrack(track: Track) {
+  openTrack(track: Track | TrackWithFavorite) {
     this.playerService.playTrack(track);
+  }
+
+  /**
+   * Toggle favorito - añade o elimina de favoritos
+   */
+  toggleFavorite(track: Track | TrackWithFavorite, event: Event) {
+    event.stopPropagation();
+
+    // Verificar si el usuario está autenticado
+    if (!this.authService.isAuthenticated()) {
+      this.snackBar.open('Debes iniciar sesión para guardar favoritos', 'Login', {
+        duration: 3000,
+      }).onAction().subscribe(() => {
+        this.router.navigate(['/login']);
+      });
+      return;
+    }
+
+    const trackWithFav = track as TrackWithFavorite;
+    const isFavorite = trackWithFav.isFavorite !== undefined 
+      ? trackWithFav.isFavorite 
+      : this.favoriteService.isFavorite(track.id);
+
+    this.favoriteService.toggleFavorite(track.id).subscribe({
+      next: () => {
+        // Actualizar el estado local
+        if (this.playlist?.tracksWithFavorite) {
+          const index = this.playlist.tracksWithFavorite.findIndex(t => t.id === track.id);
+          if (index !== -1) {
+            this.playlist.tracksWithFavorite[index].isFavorite = !isFavorite;
+          }
+        }
+
+        const message = isFavorite ? 'Eliminado de favoritos' : 'Añadido a favoritos';
+        this.snackBar.open(message, '', { duration: 2000 });
+      },
+      error: (error) => {
+        console.error('Error toggling favorite:', error);
+        this.snackBar.open('Error al actualizar favoritos', '', { duration: 2000 });
+      }
+    });
+  }
+
+  /**
+   * Verifica si una canción está en favoritos
+   */
+  isFavorite(track: Track | TrackWithFavorite): boolean {
+    const trackWithFav = track as TrackWithFavorite;
+    if (trackWithFav.isFavorite !== undefined) {
+      return trackWithFav.isFavorite;
+    }
+    return this.favoriteService.isFavorite(track.id);
+  }
+
+  /**
+   * Obtiene las canciones (con o sin info de favoritos)
+   */
+  getTracks(): (Track | TrackWithFavorite)[] {
+    if (this.playlist?.tracksWithFavorite) {
+      return this.playlist.tracksWithFavorite;
+    }
+    return this.playlist?.tracks || [];
   }
 
   getMoodColor(): string {
@@ -112,5 +188,7 @@ export class PlaylistComponent implements OnInit {
     this.router.navigate(['/mood-selector'], { queryParams: { audience: this.audience } }); 
   }
   
-  goHome() { this.router.navigate(['/']); }
+  goHome() { 
+    this.router.navigate(['/']); 
+  }
 }

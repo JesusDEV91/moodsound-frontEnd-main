@@ -26,7 +26,7 @@
 }
 
 .mood-title {
-  font-size: 1.1rem; /* Letras más pequeñas y elegantes */
+  font-size: 1.1rem;
   font-weight: 800;
   margin: 0;
   color: #1e293b;
@@ -54,16 +54,15 @@
 }
 
 /* =========================================
-   2. TARJETAS DE CANCIONES (Play al final)
+   2. TARJETAS DE CANCIONES (Play al final + Favoritos)
    ========================================= */
 .track-card {
   display: flex;
   align-items: center;
-  padding: 10px 15px; /* Más compacto */
+  padding: 10px 15px;
   background: white;
   border-radius: 14px;
   margin-bottom: 10px;
-  cursor: pointer;
   transition: all 0.2s ease;
   animation: slideIn 0.3s ease forwards;
   opacity: 0;
@@ -76,12 +75,13 @@
 }
 
 .track-thumb {
-  width: 50px; /* Foto un poco más pequeña */
+  width: 50px;
   height: 50px;
   position: relative;
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .track-thumb img {
@@ -91,32 +91,102 @@
   display: block;
 }
 
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.track-thumb:hover .play-overlay {
+  opacity: 1;
+}
+
+.play-overlay mat-icon {
+  color: white;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
 .track-details {
-  flex: 1; /* Ocupa el espacio central */
+  flex: 1;
   margin-left: 15px;
-  overflow: hidden; /* Evita que el texto rompa el layout */
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .track-title {
-  font-size: 0.88rem; /* Título más pequeño */
+  font-size: 0.88rem;
   font-weight: 600;
   margin: 0;
   color: #1e293b;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* Corta el texto si es muy largo con ... */
+  text-overflow: ellipsis;
 }
 
 .track-artist {
-  font-size: 0.75rem; /* Artista más pequeño */
+  font-size: 0.75rem;
   color: #64748b;
   margin: 2px 0 0 0;
 }
 
-/* BOTÓN PLAY AL FINAL A LA DERECHA */
+/* =========================================
+   3. BOTONES DE ACCIONES (Favorito + Play)
+   ========================================= */
+.track-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+/* Botón de favorito */
+.btn-favorite {
+  transition: all 0.2s ease;
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.btn-favorite mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+.btn-favorite:hover {
+  transform: scale(1.1);
+}
+
+/* Favorito activo (rojo) */
+.btn-favorite[color="warn"] mat-icon {
+  color: #f44336 !important;
+  animation: heartbeat 0.3s ease-in-out;
+}
+
+/* Favorito inactivo (gris) */
+.btn-favorite:not([color="warn"]) mat-icon {
+  color: #94a3b8;
+}
+
+.btn-favorite:not([color="warn"]):hover mat-icon {
+  color: #f44336;
+}
+
+/* Botón de play */
 .btn-play-mini {
-  margin-left: auto; /* Empuja el botón al final de la fila flex */
-  color: #6366f1;
+  color: #6366f1 !important;
+  width: 36px !important;
+  height: 36px !important;
 }
 
 .btn-play-mini mat-icon {
@@ -125,22 +195,36 @@
   height: 24px;
 }
 
-/* Limpieza de botones */
-button { appearance: none; -webkit-appearance: none; border: none; outline: none; }
-button::-webkit-details-marker { display: none; }
+.btn-play-mini:hover {
+  color: #4f46e5 !important;
+  transform: scale(1.05);
+}
 
 /* =========================================
-   3. ANIMACIONES
+   4. ANIMACIONES
    ========================================= */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.spinning { animation: rotate 1s linear infinite; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
 
-/* Etiqueta audiencia pequeña */
+.spinning { 
+  animation: rotate 1s linear infinite; 
+}
+
+@keyframes rotate { 
+  from { transform: rotate(0deg); } 
+  to { transform: rotate(360deg); } 
+}
+
+/* =========================================
+   5. ETIQUETAS Y ESTADOS
+   ========================================= */
 .audience-tag {
   font-size: 0.65rem;
   font-weight: 700;
@@ -148,5 +232,142 @@ button::-webkit-details-marker { display: none; }
   border-radius: 4px;
   text-transform: uppercase;
 }
-.audience-tag.adult { background: #e0e7ff; color: #4338ca; }
-.audience-tag.kids { background: #dcfce7; color: #059669; }
+
+.audience-tag.adult { 
+  background: #e0e7ff; 
+  color: #4338ca; 
+}
+
+.audience-tag.kids { 
+  background: #dcfce7; 
+  color: #059669; 
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+}
+
+.error-container mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+.empty-state mat-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+/* =========================================
+   6. SKELETON LOADING
+   ========================================= */
+.skeleton-card {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.skeleton-thumb {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-details {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-line.title {
+  width: 70%;
+}
+
+.skeleton-line.artist {
+  width: 40%;
+}
+
+.skeleton-btn {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 50%;
+  margin-left: auto;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* =========================================
+   7. RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .playlist-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .header-left, .header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .mood-title {
+    font-size: 1rem;
+  }
+
+  .track-actions {
+    flex-direction: row;
+    gap: 2px;
+  }
+}
+
+/* Limpieza de botones */
+button { 
+  appearance: none; 
+  -webkit-appearance: none; 
+  border: none; 
+  outline: none; 
+}
+
+button::-webkit-details-marker { 
+  display: none; 
+}

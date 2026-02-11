@@ -1,27 +1,45 @@
+<app-navbar></app-navbar>
+
 <div class="landing-container">
   <div class="hero-section">
     <!-- Logo o título -->
-    <h1 class="app-title"><mat-icon class="brand-icon">music_note</mat-icon> MoodSound</h1><br><br>
+    <h1 class="app-title">
+      <mat-icon class="brand-icon">music_note</mat-icon> MoodSound
+    </h1>
     <p class="app-subtitle">Descubre música según tu estado de ánimo</p>
 
     <!-- Descripción -->
     <div class="description">
       <p>
-        <strong>MoodSound</strong> te ayuda a encontrar <strong><i>la música perfecta</i></strong> para cómo te sientes</p>
+        <strong>MoodSound</strong> te ayuda a encontrar <strong><i>la música perfecta</i></strong> para cómo te sientes
+      </p>
       <p>
         Simplemente escribe o selecciona un estado de ánimo...
-        ¡y te mostraremos una <strong> playlist personalizada</strong> de YouTube Music!
+        ¡y te mostraremos una <strong>playlist personalizada</strong> de YouTube Music!
       </p>
     </div>
 
-    
-    <button 
-      mat-raised-button 
-      class="start-button"
-      (click)="goToMoodSelector()">
-      Comenzar 
-    </button>
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <button 
+        mat-raised-button 
+        color="primary"
+        class="start-button"
+        (click)="goToMoodSelector()">
+        <mat-icon>search</mat-icon>
+        Comenzar 
+      </button>
 
+      <button 
+        *ngIf="!authService.isAuthenticated()"
+        mat-raised-button 
+        color="accent"
+        class="register-button"
+        (click)="goToRegister()">
+        <mat-icon>person_add</mat-icon>
+        Crear Cuenta Gratis
+      </button>
+    </div>
 
     <div class="features">
       <div class="feature">
@@ -46,6 +64,12 @@
         <mat-icon>flash_on</mat-icon>
         <h3>Súper rápido</h3>
         <p>Resultados en menos de 10 segundos</p>
+      </div>
+
+      <div class="feature" *ngIf="authService.isAuthenticated()">
+        <mat-icon>favorite</mat-icon>
+        <h3>Tus Favoritos</h3>
+        <p>Guarda y organiza tus canciones preferidas</p>
       </div>
     </div>
   </div>

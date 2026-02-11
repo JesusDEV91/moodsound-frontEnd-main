@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,8 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-// MatSliderModule eliminado
+import { NavbarComponent } from '../navbar/navbar'; 
 import { MoodService } from '../../services/mood.service';
+import { AuthService } from '../../services/auth.service'; 
 import { Mood } from '../../models/mood.model';
 
 @Component({
@@ -21,12 +22,17 @@ import { Mood } from '../../models/mood.model';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    NavbarComponent 
   ],
   templateUrl: './mood-selector.html',
   styleUrls: ['./mood-selector.css']
 })
 export class MoodSelectorComponent implements OnInit {
+  private moodService = inject(MoodService);
+  private router = inject(Router);
+  authService = inject(AuthService); 
+
   userText: string = '';
   intensityValue: number = 3; 
   selectedAudience: 'ADULT' | 'KIDS' = 'ADULT'; 
@@ -35,11 +41,6 @@ export class MoodSelectorComponent implements OnInit {
   loading: boolean = false;
   fetchingMoods: boolean = true;
   errorMessage: string = '';
-
-  constructor(
-    private moodService: MoodService,
-    private router: Router
-  ) { }
 
   ngOnInit() {
     this.loadMoods();
@@ -112,7 +113,8 @@ export class MoodSelectorComponent implements OnInit {
   goBack() {
     this.router.navigate(['/']);
   }
+
   getBackgroundClass() {
-  return this.selectedAudience === 'KIDS' ? 'kids-bg' : 'adult-bg';
-}
+    return this.selectedAudience === 'KIDS' ? 'kids-bg' : 'adult-bg';
+  }
 }

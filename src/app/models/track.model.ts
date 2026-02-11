@@ -3,10 +3,15 @@ export interface Track {
   youtubeId: string;
   title: string;
   artist: string;
-  album: string | null;
-  thumbnailUrl: string | null;
+  album?: string;
+  thumbnailUrl: string;
   externalUrl: string;
-  durationMs: number | null;
-  popularity: number | null;
-  createdAt: string;
+  durationMs?: number;
+  popularity?: number;
+  audienceType?: 'ADULT' | 'KIDS';
+  createdAt?: string;
+}
+
+export interface TrackWithFavorite extends Track {
+  isFavorite: boolean;
 }

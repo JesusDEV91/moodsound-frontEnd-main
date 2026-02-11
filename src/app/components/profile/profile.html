@@ -1,0 +1,108 @@
+<app-navbar></app-navbar>
+
+<div class="profile-container">
+  <div class="profile-content">
+    
+    <!-- Header -->
+    <div class="profile-header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Mi Perfil</h1>
+    </div>
+
+    <!-- Tarjeta de perfil -->
+    <mat-card class="profile-card">
+      
+      <!-- Avatar y nombre -->
+      <div class="profile-avatar-section">
+        <div class="profile-avatar-large">
+          {{ userInitial }}
+        </div>
+        <div class="profile-info-main">
+          <h2>{{ user?.fullName || user?.username }}</h2>
+          <p class="profile-username">@{{ user?.username }}</p>
+          <p class="profile-member-since">
+            <mat-icon>calendar_today</mat-icon>
+            Miembro desde {{ memberSince }}
+          </p>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Información del perfil -->
+      <div class="profile-details">
+        <h3>Información de la cuenta</h3>
+
+        <div class="profile-field">
+          <mat-icon>person</mat-icon>
+          <div class="field-content">
+            <label>Nombre completo</label>
+            <p *ngIf="!editMode">{{ user?.fullName || 'No especificado' }}</p>
+            <mat-form-field *ngIf="editMode" appearance="outline">
+              <input matInput [value]="user?.fullName" disabled>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <mat-icon>alternate_email</mat-icon>
+          <div class="field-content">
+            <label>Nombre de usuario</label>
+            <p>{{ user?.username }}</p>
+          </div>
+        </div>
+
+        <div class="profile-field">
+          <mat-icon>email</mat-icon>
+          <div class="field-content">
+            <label>Correo electrónico</label>
+            <p>{{ user?.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Estadísticas -->
+      <div class="profile-stats">
+        <h3>Estadísticas</h3>
+        
+        <div class="stats-grid">
+          <div class="stat-card" (click)="goToFavorites()">
+            <mat-icon>favorite</mat-icon>
+            <div class="stat-info">
+              <h4>{{ favoriteCount }}</h4>
+              <p>Canciones favoritas</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <mat-icon>music_note</mat-icon>
+            <div class="stat-info">
+              <h4>-</h4>
+              <p>Playlists creadas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Acciones -->
+      <div class="profile-actions">
+        <!-- <button mat-raised-button color="primary" (click)="toggleEditMode()">
+          <mat-icon>{{ editMode ? 'close' : 'edit' }}</mat-icon>
+          {{ editMode ? 'Cancelar' : 'Editar perfil' }}
+        </button> -->
+
+        <button mat-raised-button color="warn" (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          Cerrar sesión
+        </button>
+      </div>
+    </mat-card>
+
+  </div>
+</div>

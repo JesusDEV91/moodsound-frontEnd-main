@@ -1,3 +1,5 @@
+<app-navbar></app-navbar>
+
 <div class="playlist-page" [style.border-top-color]="getMoodColor()">
   
   <header class="playlist-header">
@@ -50,28 +52,40 @@
 
   <main class="tracks-container" *ngIf="!loading && playlist">
     <div class="track-card" 
-         *ngFor="let track of playlist.tracks; let i = index"
-         (click)="openTrack(track)"
+         *ngFor="let track of getTracks(); let i = index"
          [style.animation-delay]="(i * 0.05) + 's'">
       
-      <div class="track-thumb">
+      <div class="track-thumb" (click)="openTrack(track)">
         <img [src]="track.thumbnailUrl" [alt]="track.title">
         <div class="play-overlay">
           <mat-icon>play_arrow</mat-icon>
         </div>
       </div>
 
-      <div class="track-details">
+      <div class="track-details" (click)="openTrack(track)">
         <h3 class="track-title">{{ track.title }}</h3>
         <p class="track-artist">{{ track.artist }}</p>
       </div>
 
-      <button mat-icon-button class="btn-play-mini">
-        <mat-icon>play_circle_outline</mat-icon>
-      </button>
+      <div class="track-actions">
+        <!-- Botón de favorito -->
+        <button 
+          mat-icon-button 
+          [color]="isFavorite(track) ? 'warn' : 'default'"
+          (click)="toggleFavorite(track, $event)"
+          [matTooltip]="isFavorite(track) ? 'Quitar de favoritos' : 'Añadir a favoritos'"
+          class="btn-favorite">
+          <mat-icon>{{ isFavorite(track) ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+
+        <!-- Botón de reproducir -->
+        <button mat-icon-button class="btn-play-mini" (click)="openTrack(track)">
+          <mat-icon>play_circle_outline</mat-icon>
+        </button>
+      </div>
     </div>
 
-    <div class="empty-state" *ngIf="playlist.tracks.length === 0">
+    <div class="empty-state" *ngIf="getTracks().length === 0">
       <mat-icon>library_music</mat-icon>
       <p>No hay canciones guardadas para este ánimo.</p>
       <button mat-raised-button color="primary" (click)="refreshPlaylist()">

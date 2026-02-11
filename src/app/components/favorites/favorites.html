@@ -1,0 +1,88 @@
+<app-navbar></app-navbar>
+
+<div class="favorites-container">
+  <div class="favorites-header">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>
+      <mat-icon>favorite</mat-icon>
+      Mis Favoritos
+    </h1>
+    <button mat-icon-button (click)="goHome()" class="home-button">
+      <mat-icon>home</mat-icon>
+    </button>
+  </div>
+
+  <div class="favorites-content">
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Cargando favoritos...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMessage && !loading" class="error-container">
+      <mat-icon>error</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-raised-button color="primary" (click)="loadFavorites()">
+        Reintentar
+      </button>
+    </div>
+
+    <!-- Sin favoritos -->
+    <div *ngIf="!loading && !errorMessage && favorites.length === 0" class="empty-container">
+      <mat-icon class="empty-icon">music_off</mat-icon>
+      <h2>No tienes favoritos aún</h2>
+      <p>Explora playlists y añade tus canciones favoritas</p>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        Explorar Música
+      </button>
+    </div>
+
+    <!-- Lista de favoritos -->
+    <div *ngIf="!loading && !errorMessage && favorites.length > 0" class="favorites-list">
+      <p class="favorites-count">{{ favorites.length }} canción{{favorites.length !== 1 ? 'es' : ''}} favorita{{favorites.length !== 1 ? 's' : ''}}</p>
+      
+      <mat-card *ngFor="let track of favorites" class="track-card">
+        <div class="track-content">
+          <img 
+            [src]="track.thumbnailUrl" 
+            [alt]="track.title"
+            class="track-thumbnail">
+          
+          <div class="track-info">
+            <h3 class="track-title">{{ track.title }}</h3>
+            <p class="track-artist">{{ track.artist }}</p>
+          </div>
+
+          <div class="track-actions">
+            <button 
+              mat-icon-button 
+              color="primary"
+              (click)="playTrack(track)"
+              matTooltip="Reproducir">
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+
+            <button 
+              mat-icon-button 
+              color="warn"
+              (click)="removeFavorite(track.id)"
+              matTooltip="Quitar de favoritos">
+              <mat-icon>favorite</mat-icon>
+            </button>
+
+            <a 
+              [href]="track.externalUrl" 
+              target="_blank"
+              mat-icon-button
+              matTooltip="Ver en YouTube">
+              <mat-icon>open_in_new</mat-icon>
+            </a>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

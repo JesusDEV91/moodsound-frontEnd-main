@@ -1,0 +1,172 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between; /* ⬅️ Cambiar de nuevo a space-between */
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-brand:hover {
+  opacity: 0.8;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* ⬅️ Añadir sombra */
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-menu button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.user-name {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f5f5f5;
+}
+
+.user-avatar-large {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #667eea;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-full-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.user-email {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+mat-divider {
+  margin: 8px 0;
+}
+
+.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hacer el navbar transparente y texto del color del fondo */
+::ng-deep .navbar {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .navbar .brand-name {
+  color: #9551d4 !important; /* Color oscuro para que se vea sobre fondo blanco */
+}
+
+::ng-deep .navbar .navbar-menu button {
+  color: #1e293b !important;
+}
+
+::ng-deep .navbar mat-icon {
+  color: #1e293b !important;
+}
+
+::ng-deep .navbar .user-avatar {
+  background-color: #667eea !important;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .brand-name {
+    display: none;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .navbar-menu button mat-icon {
+    margin: 0;
+  }
+
+  .navbar-menu button span {
+    display: none;
+  }
+  
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+}

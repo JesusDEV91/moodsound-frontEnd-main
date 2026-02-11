@@ -1,0 +1,76 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>🎵 Iniciar Sesión</h1>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="login()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Usuario</mat-label>
+          <input 
+            matInput 
+            [(ngModel)]="username" 
+            name="username"
+            placeholder="Ingresa tu usuario"
+            required>
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input 
+            matInput 
+            [type]="hidePassword ? 'password' : 'text'"
+            [(ngModel)]="password" 
+            name="password"
+            placeholder="Ingresa tu contraseña"
+            required>
+          <mat-icon matPrefix>lock</mat-icon>
+          <button 
+            mat-icon-button 
+            matSuffix 
+            type="button"
+            (click)="hidePassword = !hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon>
+          {{ errorMessage }}
+        </div>
+
+        <div class="button-group">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="loading"
+            class="full-width">
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Iniciar Sesión</span>
+          </button>
+
+          <button 
+            mat-button 
+            type="button"
+            (click)="goToRegister()"
+            class="full-width">
+            ¿No tienes cuenta? Regístrate
+          </button>
+
+          <button 
+            mat-button 
+            type="button"
+            (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            Volver
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
