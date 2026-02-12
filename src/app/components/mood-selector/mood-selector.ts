@@ -7,9 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NavbarComponent } from '../navbar/navbar'; 
+import { NavbarComponent } from '../navbar/navbar';
 import { MoodService } from '../../services/mood.service';
-import { AuthService } from '../../services/auth.service'; 
+import { AuthService } from '../../services/auth.service';
 import { Mood } from '../../models/mood.model';
 
 @Component({
@@ -23,7 +23,7 @@ import { Mood } from '../../models/mood.model';
     MatFormFieldModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    NavbarComponent 
+    NavbarComponent
   ],
   templateUrl: './mood-selector.html',
   styleUrls: ['./mood-selector.css']
@@ -31,7 +31,7 @@ import { Mood } from '../../models/mood.model';
 export class MoodSelectorComponent implements OnInit {
   private moodService = inject(MoodService);
   private router = inject(Router);
-  authService = inject(AuthService); 
+  authService = inject(AuthService);
 
   userText: string = '';
   intensityValue: number = 3; 

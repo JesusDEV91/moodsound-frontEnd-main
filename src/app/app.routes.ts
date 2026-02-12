@@ -5,15 +5,23 @@ import { PlaylistComponent } from './components/playlist/playlist';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { FavoritesComponent } from './components/favorites/favorites';
-import { ProfileComponent } from './components/profile/profile'; 
+import { ProfileComponent } from './components/profile/profile';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'mood-selector', component: MoodSelectorComponent },
-  { path: 'playlist/:mood', component: PlaylistComponent },
+  { 
+    path: 'mood-selector', 
+    component: MoodSelectorComponent,
+    canActivate: [authGuard]  
+  },
+  { 
+    path: 'playlist/:mood', 
+    component: PlaylistComponent,
+    canActivate: [authGuard]  
+  },
   { 
     path: 'favorites', 
     component: FavoritesComponent,

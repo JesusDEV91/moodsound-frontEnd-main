@@ -21,26 +21,28 @@
 
     <!-- Botones de acción -->
     <div class="action-buttons">
-      <button 
-        mat-raised-button 
-        color="primary"
-        class="start-button"
-        (click)="goToMoodSelector()">
-        <mat-icon>search</mat-icon>
-        Comenzar 
-      </button>
+  <button 
+    mat-raised-button 
+    color="primary"
+    class="start-button"
+    (click)="goToMoodSelector()">
+    <mat-icon>play_circle</mat-icon>
+    Comenzar 
+  </button>
 
-      <button 
-        *ngIf="!authService.isAuthenticated()"
-        mat-raised-button 
-        color="accent"
-        class="register-button"
-        (click)="goToRegister()">
-        <mat-icon>person_add</mat-icon>
-        Crear Cuenta Gratis
-      </button>
-    </div>
+  <!-- Mostrar botón de registro solo si NO está autenticado -->
+  <button 
+    *ngIf="!authService.isAuthenticated()"
+    mat-raised-button 
+    color="accent"
+    class="register-button"
+    (click)="goToRegister()">
+    <mat-icon>person_add</mat-icon>
+    Crear Cuenta Gratis
+  </button>
+</div>
 
+    <!-- Features -->
     <div class="features">
       <div class="feature">
         <mat-icon>text_fields</mat-icon>

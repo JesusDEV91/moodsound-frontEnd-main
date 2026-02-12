@@ -43,7 +43,7 @@ export class RegisterComponent {
   hideConfirmPassword: boolean = true;
 
   register() {
-    // Validaciones
+    
     if (!this.username.trim() || !this.email.trim() || !this.password.trim() || !this.fullName.trim()) {
       this.errorMessage = 'Por favor completa todos los campos';
       return;
