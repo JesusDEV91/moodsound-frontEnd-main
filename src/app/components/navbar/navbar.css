@@ -3,6 +3,9 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar-content {
@@ -21,7 +24,7 @@
   gap: 12px;
   cursor: pointer;
   transition: opacity 0.2s;
-  color: rgb(193, 190, 190);
+  color: #ffffff;
   text-decoration: none;
 }
 
@@ -125,22 +128,24 @@ mat-divider {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Hacer el navbar transparente y texto del color del fondo */
+/* Estilos para el navbar con fondo oscuro */
 ::ng-deep .navbar {
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
 ::ng-deep .navbar .brand-name {
-  color: #9551d4 !important; /* Color oscuro para que se vea sobre fondo blanco */
+  color: #ffffff !important;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 ::ng-deep .navbar .navbar-menu button {
-  color: #1e293b !important;
+  color: #ffffff !important;
 }
 
 ::ng-deep .navbar mat-icon {
-  color: #1e293b !important;
+  color: #ffffff !important;
 }
 
 ::ng-deep .navbar .user-avatar {
