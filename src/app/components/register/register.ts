@@ -42,7 +42,7 @@ export class RegisterComponent {
   hidePassword: boolean = true;
   hideConfirmPassword: boolean = true;
 
-  register() {
+  async register() {
     
     if (!this.username.trim() || !this.email.trim() || !this.password.trim() || !this.fullName.trim()) {
       this.errorMessage = 'Por favor completa todos los campos';
@@ -74,18 +74,16 @@ export class RegisterComponent {
       fullName: this.fullName
     };
 
-    this.authService.register(registerData).subscribe({
-      next: (response) => {
-        this.loading = false;
-        console.log('Registro exitoso:', response);
-        this.router.navigate(['/mood-selector']);
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error en registro:', error);
-        this.errorMessage = error.error?.error || 'Error al registrar usuario';
-      }
-    });
+    try {
+      const response = await this.authService.register(registerData);
+      this.loading = false;
+      console.log('Registro exitoso:', response);
+      this.router.navigate(['/mood-selector']);
+    } catch (error) {
+      this.loading = false;
+      console.error('Error en registro:', error);
+      this.errorMessage = (error as any).error?.error || 'Error al registrar usuario';
+    }
   }
 
   isValidEmail(email: string): boolean {

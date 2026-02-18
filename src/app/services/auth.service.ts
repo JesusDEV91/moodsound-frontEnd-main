@@ -1,9 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { LoginRequest, RegisterRequest, AuthResponse } from '../models/auth.model';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  // Estado del usuario actual
+  
   currentUser = signal<AuthResponse | null>(null);
   isAuthenticated = signal<boolean>(false);
 
@@ -21,41 +22,64 @@ export class AuthService {
     this.loadUserFromStorage();
   }
 
-  /**
-   * Registra un nuevo usuario
-   */
-  register(data: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
-      tap(response => this.handleAuthSuccess(response))
-    );
+ 
+  async register(data: RegisterRequest): Promise<AuthResponse> {
+    const hashedPassword = await this.hashPassword(data.password);
+    const registerData = {
+      ...data,
+      password: hashedPassword
+    };
+    return new Promise((resolve, reject) => {
+      this.http.post<AuthResponse>(`${this.apiUrl}/register`, registerData).subscribe({
+        next: (response) => {
+          this.handleAuthSuccess(response);
+          resolve(response);
+        },
+        error: (error) => reject(error)
+      });
+    });
   }
 
-  /**
-   * Inicia sesión
-   */
-  login(data: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
-      tap(response => this.handleAuthSuccess(response))
-    );
+
+  async login(data: LoginRequest): Promise<AuthResponse> {
+    const hashedPassword = await this.hashPassword(data.password);
+    const loginData = {
+      ...data,
+      password: hashedPassword
+    };
+    return new Promise((resolve, reject) => {
+      this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData).subscribe({
+        next: (response) => {
+          this.handleAuthSuccess(response);
+          resolve(response);
+        },
+        error: (error) => reject(error)
+      });
+    });
   }
 
-  /**
-   * Verifica el token actual
-   */
+ 
+  private async hashPassword(password: string): Promise<string> {
+    const rounds = 10;
+    return await bcrypt.hash(password, rounds);
+  }
+
+ 
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
+  }
+
+ 
   verifyToken(): Observable<AuthResponse> {
     return this.http.get<AuthResponse>(`${this.apiUrl}/verify`);
   }
 
-  /**
-   * Obtiene el perfil del usuario
-   */
+ 
   getProfile(): Observable<AuthResponse> {
     return this.http.get<AuthResponse>(`${this.apiUrl}/profile`);
   }
 
-  /**
-   * Cierra sesión
-   */
+  
   logout(): void {
     localStorage.removeItem('moodsound_token');
     localStorage.removeItem('moodsound_user');
@@ -64,16 +88,12 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  /**
-   * Obtiene el token almacenado
-   */
+  
   getToken(): string | null {
     return localStorage.getItem('moodsound_token');
   }
 
-  /**
-   * Obtiene los headers con autenticación
-   */
+ 
   getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders({
@@ -81,9 +101,7 @@ export class AuthService {
     });
   }
 
-  /**
-   * Maneja el éxito de autenticación
-   */
+  
   private handleAuthSuccess(response: AuthResponse): void {
     localStorage.setItem('moodsound_token', response.token);
     localStorage.setItem('moodsound_user', JSON.stringify(response));
@@ -91,9 +109,7 @@ export class AuthService {
     this.isAuthenticated.set(true);
   }
 
-  /**
-   * Carga el usuario desde localStorage al iniciar
-   */
+  
   private loadUserFromStorage(): void {
     const token = localStorage.getItem('moodsound_token');
     const userStr = localStorage.getItem('moodsound_user');

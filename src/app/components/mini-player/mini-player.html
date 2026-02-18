@@ -1,5 +1,5 @@
-<div class="mini-player-fixed" *ngIf="playerService.currentTrack() as track">
-  <div class="player-card">
+<div class="mini-player-fixed" *ngIf="playerService.currentTrack() as track" #playerContainer (mousedown)="onMouseDown($event)">
+  <div class="player-card" [class.dragging]="isDragging">
     <div class="video-container">
       <youtube-player 
         [videoId]="track.youtubeId" 

@@ -38,7 +38,7 @@ export class LoginComponent {
   errorMessage: string = '';
   hidePassword: boolean = true;
 
-  login() {
+  async login() {
     if (!this.username.trim() || !this.password.trim()) {
       this.errorMessage = 'Por favor completa todos los campos';
       return;
@@ -52,18 +52,16 @@ export class LoginComponent {
       password: this.password
     };
 
-    this.authService.login(loginData).subscribe({
-      next: (response) => {
-        this.loading = false;
-        console.log('Login exitoso:', response);
-        this.router.navigate(['/mood-selector']);
-      },
-      error: (error) => {
-        this.loading = false;
-        console.error('Error en login:', error);
-        this.errorMessage = error.error?.error || 'Credenciales inválidas';
-      }
-    });
+    try {
+      const response = await this.authService.login(loginData);
+      this.loading = false;
+      console.log('Login exitoso:', response);
+      this.router.navigate(['/mood-selector']);
+    } catch (error) {
+      this.loading = false;
+      console.error('Error en login:', error);
+      this.errorMessage = (error as any).error?.error || 'Credenciales inválidas';
+    }
   }
 
   goToRegister() {
